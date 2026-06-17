@@ -99,11 +99,36 @@ def card_ids(cards):
 
 
 def visible_card_ids(obs, player_index):
-    """All card IDs currently visible (hand/active/bench/discard/prize) for a player."""
+    """All KNOWN card IDs currently visible (hand/active/bench/discard) for a player.
+
+    IMPORTANT: active/bench card dicts can carry extra nested cards that are NOT
+    listed at the top level and must be counted too, or zone-count accounting
+    comes up short of the true 60-card total:
+      - "preEvolution": card(s) this Pokemon evolved from (consumed by evolution,
+        not placed in discard).
+      - "energyCards": energy cards physically attached to this Pokemon (distinct
+        from "energies", which are energy TYPE ints, not card IDs).
+      - "tools": Pokemon Tool cards attached to this Pokemon.
+
+    NOTE: "prize" is deliberately EXCLUDED here. Prize cards are real physical
+    cards already removed from deckCount at game start, but their identity stays
+    hidden (`null`) until taken -- they are not "visible" in the sense of a known
+    card ID. Callers that need the full 60-card accounting must separately add
+    len(player["prize"]) (the unknown-prize-card COUNT) on top of this function's
+    result; see sample_determinized_hidden_state in step6_forward_model_validation.py
+    for the worked example (confirmed empirically: omitting the +len(prize) term
+    undercounts a player's true card total by exactly their remaining prize count).
+    """
     player = obs["current"]["players"][player_index]
     ids = []
-    for zone in ("hand", "active", "bench", "discard", "prize"):
+    for zone in ("hand", "active", "bench", "discard"):
         ids.extend(card_ids(player.get(zone)))
+    for zone in ("active", "bench"):
+        for card in player.get(zone) or []:
+            if isinstance(card, dict):
+                ids.extend(card_ids(card.get("preEvolution")))
+                ids.extend(card_ids(card.get("energyCards")))
+                ids.extend(card_ids(card.get("tools")))
     return ids
 
 

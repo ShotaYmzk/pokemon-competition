@@ -1,0 +1,28 @@
+=== STEP 6: Forward Model Validation ===
+
+[1] Reached mid-game at real-play step 7, turn=2, yourIndex=0
+    my prize remaining=6 opp prize remaining=6
+    my active=[{'id': 722, 'serial': 7, 'playerIndex': 0, 'hp': 90, 'maxHp': 90, 'appearThisTurn': False, 'energies': [], 'energyCards': [], 'tools': [], 'preEvolution': []}]
+    opp active=[{'id': 721, 'serial': 63, 'playerIndex': 1, 'hp': 150, 'maxHp': 150, 'appearThisTurn': False, 'energies': [3], 'energyCards': [{'id': 3, 'serial': 90, 'playerIndex': 1}], 'tools': [], 'preEvolution': []}]
+
+[2] Determinization (random.sample w/o replacement over unseen multiset): your_deck_sample len=46 opp_deck_sample len=46 opp_hand_sample len=5
+    (deck.csv 60-card multiset minus ALL visible cards -- including preEvolution -- on both sides)
+    my deckCount=46 opp deckCount=46
+
+    SearchBegin error=0
+    select.option count=7 type=0
+
+[3] Per-action SearchStep sanity checks:
+    action_idx=0 option={'type': 8, 'area': 2, 'index': 0, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=4 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=1 option={'type': 7, 'index': 1} -> error=0 next_select_options=13 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=2 option={'type': 8, 'area': 2, 'index': 2, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=4 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=3 option={'type': 8, 'area': 2, 'index': 4, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=4 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=4 option={'type': 7, 'index': 5} -> error=0 next_select_options=8 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=5 option={'type': 8, 'area': 2, 'index': 6, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=4 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=6 option={'type': 14} -> error=0 next_select_options=11 prizes(mine,opp)=[6, 6] result=-1
+
+[4] Full random playout via repeated SearchStep from this state:
+    [ERROR] SearchStep failed at step 11: error=5 text='{"state":null,"error":5}'
+    Playout stopped early due to error: (11, 5, '{"state":null,"error":5}')
+
+=== STEP 6 Complete ===

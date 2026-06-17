@@ -14,26 +14,132 @@ Findings are appended to findings.md under "## STEP 7" by this script's caller
 producing and printing the validation evidence.
 """
 
+import collections
 import json
 import os
 import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 os.environ.setdefault("KAGGLE_ENVIRONMENTS_SUPPRESS_LOGS", "1")
 
 from kaggle_environments.envs.cabt.cg.game import battle_start, battle_select, battle_finish
 
-from explore.search_api import (
-    agent_start,
-    card_ids,
-    first_valid_search_action,
-    remaining_deck_guess,
-    search_begin,
-    search_end,
-    search_step,
-)
+try:
+    from explore.search_api import (
+        agent_start,
+        card_ids,
+        first_valid_search_action,
+        search_begin,
+        search_end,
+        search_step,
+        visible_card_ids,
+    )
+except ImportError:
+    from search_api import (
+        agent_start,
+        card_ids,
+        first_valid_search_action,
+        search_begin,
+        search_end,
+        search_step,
+        visible_card_ids,
+    )
+
+
+def sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng):
+    """Build a LEGAL determinization of hidden information (Task B requirement).
+
+    IMPORTANT (confirmed empirically): each player has their OWN independent
+    60-card deck -- battle_start(deck, deck) gives both players a deck with the
+    SAME composition, but they are two separate physical 60-card pools, not one
+    shared 120-card pool split between players. So "unseen" must be computed
+    PER PLAYER: your hidden cards (own prize) come from deck-minus-your-visible;
+    the opponent's hidden cards (opp prize/hand/deck) come from a SEPARATE
+    deck-minus-opp-visible pool. Mixing the two into a single 60-card multiset
+    (an earlier, buggy version of this function) produces an impossible
+    requirement, e.g. needing 63 cards from a 49-card pool, because it
+    double-subtracts each side's own visible cards against the other side's
+    budget.
+
+    Each side's hidden cards are sampled WITHOUT REPLACEMENT (collections.Counter
+    multiset subtraction + random.sample) from that side's own 60-card deck
+    composition minus the cards already visible for that side. This respects
+    deck legality, unlike the step5_v2 placeholder tricks (full_deck_all_slots/
+    zero_filled) and unlike a plain "remaining in deck order" guess
+    (remaining_deck_guess), which does not randomize.
+    """
+    your_player = obs["current"]["players"][your_index]
+    opp_player = obs["current"]["players"][opp_index]
+
+    your_visible = visible_card_ids(obs, your_index)
+    opp_visible = visible_card_ids(obs, opp_index)
+
+    # --- your side: only your prize identities are hidden (from yourself) ---
+    your_unseen = collections.Counter(deck)
+    for cid in your_visible:
+        your_unseen[cid] -= 1
+    your_unseen_pool = []
+    for cid, n in your_unseen.items():
+        if n > 0:
+            your_unseen_pool.extend([cid] * n)
+
+    your_prize_count = len(your_player["prize"])
+    if your_prize_count > len(your_unseen_pool):
+        raise ValueError(
+            f"Need {your_prize_count} unseen cards for your_prize but your pool only has "
+            f"{len(your_unseen_pool)}. pool={collections.Counter(your_unseen_pool)}"
+        )
+    your_prize_sample = rng.sample(your_unseen_pool, your_prize_count)
+
+    # remaining of your own deck = your_unseen_pool minus the sampled prize cards,
+    # capped at deckCount (the rest, if any slack, is impossible by construction
+    # since your_visible + prize + deckCount should equal exactly 60).
+    your_deck_visible_removed = collections.Counter(your_unseen_pool)
+    for cid in your_prize_sample:
+        your_deck_visible_removed[cid] -= 1
+    your_deck_sample = []
+    for cid in deck:
+        if your_deck_visible_removed[cid] > 0:
+            your_deck_sample.append(cid)
+            your_deck_visible_removed[cid] -= 1
+    your_deck_sample = your_deck_sample[: your_player["deckCount"]]
+
+    # --- opponent side: prize + hand + deck are all hidden from you ---
+    opp_unseen = collections.Counter(deck)
+    for cid in opp_visible:
+        opp_unseen[cid] -= 1
+    opp_unseen_pool = []
+    for cid, n in opp_unseen.items():
+        if n > 0:
+            opp_unseen_pool.extend([cid] * n)
+
+    opp_prize_count = len(opp_player["prize"])
+    opp_hand_count = opp_player["handCount"]
+    opp_deck_count = opp_player["deckCount"]
+    needed = opp_prize_count + opp_hand_count + opp_deck_count
+    if needed > len(opp_unseen_pool):
+        raise ValueError(
+            f"Need {needed} unseen cards (opp_prize={opp_prize_count} "
+            f"opp_hand={opp_hand_count} opp_deck={opp_deck_count}) but opp pool only has "
+            f"{len(opp_unseen_pool)}. pool={collections.Counter(opp_unseen_pool)}"
+        )
+
+    sampled = rng.sample(opp_unseen_pool, needed)
+    opp_prize_sample = sampled[:opp_prize_count]
+    opp_hand_sample = sampled[opp_prize_count: opp_prize_count + opp_hand_count]
+    opp_deck_sample = sampled[opp_prize_count + opp_hand_count:]
+
+    return {
+        "your_deck": your_deck_sample,
+        "your_prize": your_prize_sample,
+        "opp_deck": opp_deck_sample,
+        "opp_prize": opp_prize_sample,
+        "opp_hand": opp_hand_sample,
+        "opp_active": card_ids(opp_player.get("active")),
+    }
 
 
 def load_deck():
@@ -115,21 +221,31 @@ def main():
     record(f"    my active={your_player['active']}")
     record(f"    opp active={opp_player['active']}")
 
-    # ---- 2. Determinized SearchBegin state ----
+    # ---- 2. Determinized SearchBegin state (proper random sampling, not a placeholder) ----
     sbi_bytes = (obs.get("search_begin_input") or "").encode("ascii")
-    your_guess = remaining_deck_guess(obs, your_index, deck)
-    opp_guess = remaining_deck_guess(obs, opp_index, deck)
-    record(f"\n[2] Determinization: your_deck_guess len={len(your_guess)} opp_deck_guess len={len(opp_guess)}")
-    record(f"    (deck.csv 60 cards minus ALL visible cards on both sides, consistent with deckCount fields)")
+    rng = random.Random(7)
+    try:
+        arrays = sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng)
+    except ValueError as e:
+        record(f"\n[2] [FAIL] determinization failed: {e}")
+        battle_finish()
+        write_findings(log)
+        return
+    record(
+        f"\n[2] Determinization (random.sample w/o replacement over unseen multiset): "
+        f"your_deck_sample len={len(arrays['your_deck'])} opp_deck_sample len={len(arrays['opp_deck'])} "
+        f"opp_hand_sample len={len(arrays['opp_hand'])}"
+    )
+    record("    (deck.csv 60-card multiset minus ALL visible cards -- including preEvolution -- on both sides)")
     record(f"    my deckCount={your_player['deckCount']} opp deckCount={opp_player['deckCount']}")
 
     agent_ptr = agent_start()
     begin_data, begin_text = search_begin(
         agent_ptr, sbi_bytes,
-        your_deck=your_guess, your_prize=[],
-        opp_deck=opp_guess, opp_prize=[],
-        opp_hand=card_ids(opp_player.get("hand")),
-        opp_active=card_ids(opp_player.get("active")),
+        your_deck=arrays["your_deck"], your_prize=arrays["your_prize"],
+        opp_deck=arrays["opp_deck"], opp_prize=arrays["opp_prize"],
+        opp_hand=arrays["opp_hand"],
+        opp_active=arrays["opp_active"],
         deck_filler=deck,
     )
     record(f"\n    SearchBegin error={begin_data.get('error')}")
