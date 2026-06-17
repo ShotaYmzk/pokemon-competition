@@ -7,8 +7,10 @@ Usage:
 Defaults to agent/main.py vs agent/main.py, N=10, seed=0.
 
 Reports win/draw rates, avg steps/game, avg wall-clock/game, and
-min/median/max wall-clock per step (measured as elapsed/num_steps per game,
-since kaggle_environments doesn't expose per-step timestamps directly).
+TRUE per-action wall-clock timing (min/median/max), measured by manually
+driving env.reset()/act_agent()/env.step() instead of relying on env.run(),
+since env.run() does not expose per-step timestamps. This calibrates search
+budget for a future MCTS agent against the runTimeout=3000s/game limit.
 """
 
 import os
@@ -19,41 +21,75 @@ import time
 os.environ.setdefault("KAGGLE_ENVIRONMENTS_SUPPRESS_LOGS", "1")
 
 from kaggle_environments import make
+from kaggle_environments.core import Agent, act_agent
 
 
-def run_match(agent1_path, agent2_path, n_games=10, seed=0):
+def run_one_game_instrumented(agent1_path, agent2_path, seed=0):
+    """Manually drive one game via env.reset()/act_agent()/env.step(), timing each action.
+
+    Returns (steps_list, step_times) where step_times is a flat list of per-action
+    wall-clock durations (one entry per agent action call, both players combined).
+    """
+    env = make("cabt", debug=False)
+    if hasattr(env, "configuration"):
+        try:
+            env.configuration["randomSeed"] = seed
+        except Exception:
+            pass
+
+    env.reset(2)
+    agents = [Agent(agent1_path, env), Agent(agent2_path, env)]
+
+    get_shared_state = getattr(env, "_Environment__get_shared_state")
+
+    step_times = []
+    t_game0 = time.time()
+    while not env.done:
+        actions = []
+        logs = []
+        for i, agent in enumerate(agents):
+            shared_state = get_shared_state(i)
+            t0 = time.perf_counter()
+            action, log = act_agent((agent, shared_state, env.configuration, None))
+            dt = time.perf_counter() - t0
+            step_times.append(dt)
+            actions.append(action)
+            logs.append(log)
+        env.step(actions, logs)
+    game_elapsed = time.time() - t_game0
+
+    return env.steps, step_times, game_elapsed
+
+
+def run_match(agent1_path, agent2_path, n_games=10, seed=0, instrument_steps=True):
     wins = [0, 0]
     draws = 0
     errors = 0
     steps_per_game = []
     wallclock_per_game = []
-    wallclock_per_step = []  # per-game average step time, one entry per game
+    all_step_times = []  # flat list across all games, one entry per individual action
 
     for i in range(n_games):
-        env = make("cabt", debug=False)
-        # Alternate seed deterministically per game so games differ but the run is reproducible.
         game_seed = seed + i
-        if hasattr(env, "configuration"):
-            try:
-                env.configuration["randomSeed"] = game_seed
-            except Exception:
-                pass
-
-        t0 = time.time()
         try:
-            result = env.run([agent1_path, agent2_path])
+            if instrument_steps:
+                steps, step_times, elapsed = run_one_game_instrumented(agent1_path, agent2_path, game_seed)
+                all_step_times.extend(step_times)
+            else:
+                env = make("cabt", debug=False)
+                t0 = time.time()
+                steps = env.run([agent1_path, agent2_path])
+                elapsed = time.time() - t0
         except Exception as e:
             print(f"[game {i}] FAILED: {e}")
             errors += 1
             continue
-        elapsed = time.time() - t0
 
-        n_steps = len(result)
+        n_steps = len(steps)
         steps_per_game.append(n_steps)
         wallclock_per_game.append(elapsed)
-        wallclock_per_step.append(elapsed / max(1, n_steps))
 
-        last = result[-1]
+        last = steps[-1]
         r0, r1 = last[0]["reward"], last[1]["reward"]
         if r0 == 1:
             wins[0] += 1
@@ -75,12 +111,14 @@ def run_match(agent1_path, agent2_path, n_games=10, seed=0):
         print(f"draw rate:       {draws / n_completed:.2%} ({draws}/{n_completed})")
         print(f"avg steps/game:  {statistics.mean(steps_per_game):.1f}")
         print(f"avg wallclock/game: {statistics.mean(wallclock_per_game):.3f}s")
-        print(
-            f"wallclock/step (per-game avg): "
-            f"min={min(wallclock_per_step):.4f}s "
-            f"median={statistics.median(wallclock_per_step):.4f}s "
-            f"max={max(wallclock_per_step):.4f}s"
-        )
+        if all_step_times:
+            print(
+                f"wallclock/action (per single agent decision, n={len(all_step_times)}): "
+                f"min={min(all_step_times)*1000:.3f}ms "
+                f"median={statistics.median(all_step_times)*1000:.3f}ms "
+                f"max={max(all_step_times)*1000:.3f}ms "
+                f"mean={statistics.mean(all_step_times)*1000:.3f}ms"
+            )
     return {
         "wins": wins,
         "draws": draws,
@@ -88,7 +126,7 @@ def run_match(agent1_path, agent2_path, n_games=10, seed=0):
         "n_completed": n_completed,
         "steps_per_game": steps_per_game,
         "wallclock_per_game": wallclock_per_game,
-        "wallclock_per_step": wallclock_per_step,
+        "step_times": all_step_times,
     }
 
 
