@@ -1,0 +1,29 @@
+=== STEP 6: Forward Model Validation ===
+
+[1] Reached mid-game at real-play step 9, turn=2, yourIndex=0
+    my prize remaining=6 opp prize remaining=6
+    my active=[{'id': 721, 'serial': 4, 'playerIndex': 0, 'hp': 150, 'maxHp': 150, 'appearThisTurn': False, 'energies': [], 'energyCards': [], 'tools': [], 'preEvolution': []}]
+    opp active=[{'id': 722, 'serial': 65, 'playerIndex': 1, 'hp': 90, 'maxHp': 90, 'appearThisTurn': False, 'energies': [3], 'energyCards': [{'id': 3, 'serial': 116, 'playerIndex': 1}], 'tools': [], 'preEvolution': []}]
+
+[2] Determinization: your_deck_guess len=52 opp_deck_guess len=57
+    (deck.csv 60 cards minus ALL visible cards on both sides, consistent with deckCount fields)
+    my deckCount=46 opp deckCount=46
+
+    SearchBegin error=0
+    select.option count=11 type=0
+
+[3] Per-action SearchStep sanity checks:
+    action_idx=0 option={'type': 7, 'index': 0} -> error=0 next_select_options=13 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=1 option={'type': 7, 'index': 1} -> error=0 next_select_options=13 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=2 option={'type': 8, 'area': 2, 'index': 2, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=9 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=3 option={'type': 8, 'area': 2, 'index': 2, 'inPlayArea': 5, 'inPlayIndex': 0} -> error=0 next_select_options=9 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=4 option={'type': 7, 'index': 3} -> error=0 next_select_options=5 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=5 option={'type': 8, 'area': 2, 'index': 4, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=8 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=6 option={'type': 8, 'area': 2, 'index': 4, 'inPlayArea': 5, 'inPlayIndex': 0} -> error=0 next_select_options=7 prizes(mine,opp)=[6, 6] result=-1
+    action_idx=7 option={'type': 8, 'area': 2, 'index': 5, 'inPlayArea': 4, 'inPlayIndex': 0} -> error=0 next_select_options=8 prizes(mine,opp)=[6, 6] result=-1
+
+[4] Full random playout via repeated SearchStep from this state:
+    [ERROR] SearchStep failed at step 25: error=4 text='{"state":null,"error":4}'
+    Playout stopped early due to error: (25, 4, '{"state":null,"error":4}')
+
+=== STEP 6 Complete ===
