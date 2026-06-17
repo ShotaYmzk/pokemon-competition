@@ -1,0 +1,4 @@
+env/
+pokemon-tcg-ai-battle/*.pdf
+__pycache__/
+*.pyc
