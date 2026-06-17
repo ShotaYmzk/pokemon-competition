@@ -239,6 +239,81 @@ STEP5 v2 の ctypes 配線をクリーンな関数群に切り出した（トッ
   - 詳細に追跡したケース（seed=7）: `minCount=2, maxCount=2` の複数選択（`context=8`, `effect.id=1121` = Ultra Ball 相当のエフェクト、6つの `type=3` オプションから2つ選ぶ）で、`[0,1]`, `[0,4]`, `[4,0]` のいずれを送っても **`error=4`** で再現した。順序や値の問題ではなく、このマルチセレクト文脈そのもので `SearchStep` が失敗する。
   - **仮説**: `SearchStep` のマルチカウント選択（`minCount>1`）の action エンコーディングが単一選択時と異なる可能性がある（例: ペアごとのフラットインデックスや、選択順序に依存する内部状態を要求するなど）。今回の `action=[i,j]`（オプション配列内のインデックスのリスト）というエンコーディングは単一選択（type=0, maxCount=1）には有効だが、`minCount=2`/`maxCount=2` のケースでは別の形式が必要と考えられる。このフォーマットの解明は今回のタスク範囲外（MCTS実装と合わせて後続タスクで詳細化が必要）。
 
+---
+
+## STEP 8: マルチセレクト SearchStep アクションエンコーディングの解明（解決）
+
+### TL;DR — 結論
+**`SearchStep` のマルチセレクト（`minCount`/`maxCount` > 1）は、選択したインデックスを `action=[i,j]` のような単一のフラットリストとして1回で送ってはいけない。代わりに、1枚ずつ単一要素 `[i]` の `SearchStep` 呼び出しを `minCount`（=`maxCount`、Ultra Ball 等のケースでは同値）回繰り返す必要がある。** これが唯一の確認されたフォーマットで、`explore/search_api.py` の `search_step()` に実装済み。
+
+### Task 1: Ground-truth path（実ゲームの `battle_select` パス）
+- `cg/sim.py:38-39`: `lib.Select.argtypes = [c_void_p, POINTER(c_int), c_int]` — battle_ptr, action配列, 配列長。`SearchStep` の `(agent_ptr, search_id, action_ptr, action_len)` と構造的に同形（差は先頭の `search_id` の有無のみ）。
+- `cg/game.py:48-66 (battle_select)`: `arg = (c_int * len(select_list))(*select_list); err = lib.Select(Battle.battle_ptr, arg, len(select_list))`。**呼び出し側コードは select_list の長さを一度に渡している** — つまり `Select`（実ゲーム側API）自体は「1回でリスト全部」という呼び出し方を受け付ける形をしている。
+- `cabt.py:73-76 (random_agent)`: `random.sample(list(range(len(obs["select"]["option"]))), obs["select"]["maxCount"])` — **`maxCount` 個のユニークなインデックスを1つのリストとして** `battle_select` に渡す。これがランダムエージェントの実装上のground truthであり、実際に `battle_select`（`Select` 経由）はこの「フラットリスト一括」呼び出しで正常に動作する（kaggle_environments の対戦は全てこの経路で正常完走している）。
+- **しかし `SearchStep` は `Select` と同じ意味のAPIではない**: 実験的に確認した通り、`SearchStep` に同じ「フラットリスト一括」を渡すと **`minCount`/`maxCount` > 1 のケースで必ず `error=4` になる**（後述）。`Select`（実戦闘）と `SearchStep`（サーチ専用チェーン）は内部実装が異なり、`SearchStep` はマルチセレクトの内部状態管理が逐次的（1手ごと）になっていると考えられる。
+
+### Task 2 & 3: 再現とエンコーディング解明（仮説検証）
+
+#### 重要な前提の崩れ: `advance_to_midgame(deck, seed=N)` は再現不可能
+`random.seed(N)` で固定しても、`battle_start`/`battle_select` を駆動するC++側（libcg.so）が独自の内部RNGを持つため、**同一シードで `advance_to_midgame` を2回呼んでも到達する中盤局面が毎回異なる**ことを確認した（`obs1 == obs2` も `steps1 == steps2` も False）。よって STEP7 で記録された「seed=7 で再現する」という記述は誤りで、実際には「ある特定の1回の実行で出た事象」であり、再実行すれば異なる局面・異なるエラーになる。本タスクでは、この事実を踏まえて多数のラン（30本規模のスキャン + 100シードスイープ）から **集計的に** エンコーディングを特定した。
+
+#### H1〜H4 検証結果
+ライブの `minCount=2, maxCount=2`（Ultra Ball, `effect.id=1121`, `context=8`）の決定点に到達したサーチチェーンに対し、同一の paused 状態（`agent_ptr`、まだ消費していない select）に複数のアクション形式を順に試した（最初に成功したフォーマットでチェーンが進むため、これ以降の形式は別の独立した paused 状態で再試行）:
+
+| 試したエンコーディング | 結果 |
+|---|---|
+| `[0, 1]`（フラット、昇順） | `error=4` |
+| `[1, 0]`（フラット、降順） | `error=4` |
+| `[opt[0]['index'], opt[1]['index']]`（card-id/フィールド空間） | `error=4` |
+| `[0, 1, 2, 3]`（オプション数过多） | `error=4` |
+| `[0]`（1要素のみ、本来必要な2要素のうち1つ） | **`error=0`** |
+| `[0, 0]`（重複インデックス） | `error=6`（別エラー、重複禁止を示唆） |
+
+`[0]` という1要素アクションが `error=0` を返したことから、「1回のSearchStepには1つのインデックスのみ」という仮説（変形版H1、複数回呼び出し）を検証:
+- `minCount=2, maxCount=2` の select に対し `search_step(ap, 0, [0])` → `error=0`。**戻り値の `select` は同じ `context=8, minCount=2, maxCount=2`、同じオプション数のまま**（選択肢は減らず、カウントも変わらない）。
+- 続けて2回目の `search_step(ap, 0, [1])`（別インデックス）→ `error=0`。この後ようやく **`select.context` が `8` → `0` に変化**し、次の通常ターン選択に進んだ。
+
+**結論（確定）**: マルチセレクトの正しいエンコーディングは、
+```
+for idx in chosen_indices:           # len(chosen_indices) == minCount (== maxCount for fixed-count effects)
+    state, err = search_step(agent_ptr, 0, [idx])
+    assert err == 0
+# 最後の呼び出しの戻り値 state が次の意思決定点
+```
+**1手につき1要素のリストで `minCount` 回呼ぶ。** 中間呼び出しの間、select dict は同じ multi-select プロンプトを返し続け（オプション数も `minCount`/`maxCount` も変化しない）、ちょうど `minCount` 回目の呼び出しの後にだけ次の決定点（このケースでは `context` が `8`→`0`）に進む。重複インデックスを送ると `error=6` になるため、エンジン側は内部的に「既に選んだインデックス」を記憶していると考えられる。
+
+#### error コード一覧（今回確認できた範囲）
+`libcg.so` にはエラー文字列テーブルが見つからない（`strings libcg.so | grep -i error` は `"error"` という1語のJSONキー名のみがヒットし、エラーコード→意味のマッピング文字列は埋め込まれていない）。実行ベースで確認できた意味は以下:
+
+| error code | 確認された意味 |
+|---|---|
+| 0 | 成功 |
+| 1 | 不正な `search_id`（`SearchStep` の第2引数。0固定以外の値を渡すと即座にこれになる。0が唯一の正しい値であることを再確認） |
+| 4 | マルチセレクトに対し、複数インデックスを1回のフラットリストで送った場合に発生（本STEPの主題） |
+| 5 | 別の独立した問題（後述、未解決） |
+| 6 | マルチセレクトの逐次呼び出し中に重複インデックスを送った場合 |
+| 30 | `SearchBegin`/`SearchStep` に `battle_ptr`（type=1）を渡した場合（STEP5で既知） |
+
+### `explore/search_api.py` の変更
+- `_search_step_raw(agent_ptr, search_id, action)`: 旧 `search_step` の実体（1回のSearchStep呼び出しのみ、特別な処理なし）。
+- `search_step(agent_ptr, search_id, action, select=None)`: 新しい公開関数。`select` 引数（呼び出し元が持っている select dict）を渡すと、`select.get('maxCount', 1) > 1` または `select.get('minCount', 0) > 1` の場合に自動でマルチセレクト処理（`action` の各要素を1要素ずつ `_search_step_raw` で逐次送信）に切り替わる。`select=None`（デフォルト）または単一選択の場合は元の挙動と完全に同じ（1回呼び出し）。呼び出し側は単一/マルチを区別する必要がない。
+
+### Definition of Done: 100シードスイープ結果
+`explore/step6b_multiselect_fix_validation.py` — 100シード、各シードで `advance_to_midgame` → `SearchBegin` → 最大500回の `SearchStep` ランダムプレイアウト（修正済み `search_step()` 使用）。
+
+```
+PASS RATE (no SearchStep error / total): 40/100 = 40.0%
+```
+
+**重要**: 残った60件のエラー（すべて `error=5`）は **全てマルチセレクトとは無関係**（`error_info` の `minCount`/`maxCount` を集計すると、60件中60件が `maxCount=1, minCount∈{0,1}` の **単一選択**。マルチセレクト（`maxCount>1`）由来のエラーは0件）。すなわち、**本タスクの目的であるマルチセレクトのエンコーディング問題は完全に解決**（マルチセレクトを経由したプレイアウト29件中、エラーになったものは0件）。残る40%のエラー率は、STEP7で既に記録されていた「`context=7` の単一選択（`effect.id=1219`, Team Rocket's Petrel 等の deck-search 効果）で起きる `error=5`」と同種の、**別の・未解決の**問題（一部は `context=0` の通常ターン選択でも発生しており、ガード外）。
+
+### 未解決の `error=5`（単一選択）について
+- ガードレールに従い、これ以上のブラインドフォーミングは行わない。観測事実のみ記録する:
+  - 60件中32件: `minCount=0, maxCount=1`（`context` は主に7、deck-search 系のオプショナル単一選択）。
+  - 60件中21件: `minCount=1, maxCount=1, context=0`（通常ターンの主選択 — type=7攻撃/type=8カードプレイ/type=14ターン終了等の混合）。
+  - 発生タイミングはシードごとに非決定的（同一シード・同一コードでも再実行すると異なるステップ数でエラーになる、またはエラーなく完走する）。これは前述の「libcg.so 内部RNGの非決定性」と直接関係している可能性が高い（プレイアウト中に手に入るカード・発生する効果が再現できないため、ある時点で `SearchBegin` 時に決定論化した隠し情報（`your_deck`/`opp_deck`/`opp_hand` 等）と、その後の実際の引き手・シャッフル結果が矛盾し、エンジン内部の状態（山札順序やカード一意性）が破綻するケースがあると推測される）。
+  - **要再調査ポイント（人間のレビュー推奨）**: `cg/game.py:13-16 (_get_battle_data)` の `search_begin_input` 生成ロジック、および `SearchBegin` 呼び出し時の `your_deck`/`opp_deck` 配列の決定論化（`explore/search_api.py` の `sample_determinized_hidden_state`、`explore/step6_forward_model_validation.py:52-142`）が、プレイアウト後半で実際に山札から引かれるカードと矛盾していないかの検証が必要。本タスクではこの根本原因の特定までは到達していない。
+
 ### Task C: `agent/greedy.py`
 優先順位ヒューリスティック実装:
 1. 相手アクティブへの確定KO攻撃（lethal）

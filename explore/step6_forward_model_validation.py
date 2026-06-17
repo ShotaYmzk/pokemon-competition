@@ -274,7 +274,7 @@ def main():
         count = min(count, max_count, 1)
         action = [idx] if count == 1 else list(range(min(count, len(options))))
 
-        step_data, step_text = search_step(agent_ptr, 0, action)
+        step_data, step_text = search_step(agent_ptr, 0, action, select=sel0)
         err = step_data.get("error")
         ok_state = step_data.get("state") is not None
         next_sel = None
@@ -318,7 +318,7 @@ def main():
         mc = min(mc, len(opts))
         action = random.sample(range(len(opts)), mc) if mc > 0 else []
 
-        step_data, step_text = search_step(agent_ptr, 0, action)
+        step_data, step_text = search_step(agent_ptr, 0, action, select=sel)
         n_search_steps += 1
         if step_data.get("error") != 0:
             error_hit = (n_search_steps, step_data.get("error"), step_text[:500])

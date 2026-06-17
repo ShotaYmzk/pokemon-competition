@@ -174,13 +174,64 @@ def search_begin(agent_ptr, sbi_bytes, your_deck, your_prize, opp_deck, opp_priz
     return _parse(raw)
 
 
-def search_step(agent_ptr, search_id, action):
-    """Call SearchStep(agent_ptr, search_id, action_list) and return (parsed, raw_text)."""
+def _search_step_raw(agent_ptr, search_id, action):
+    """Low-level: call SearchStep(agent_ptr, search_id, action_list) once and return
+    (parsed, raw_text). `action` is sent EXACTLY as given (no multi-select handling).
+
+    NOTE: for a select with minCount/maxCount > 1, sending all chosen indices in one
+    call here is WRONG and reliably returns error=4 (see search_step / findings.md
+    "Multi-select SearchStep action encoding"). Use search_step() instead, which
+    detects multi-select context and submits indices one at a time.
+    """
     _bind_types()
     action = list(action)
     arr = make_int_array(action, min_len=max(1, len(action)), filler=action or [0])
     raw = lib.SearchStep(agent_ptr, search_id, arr, len(action))
     return _parse(raw)
+
+
+def search_step(agent_ptr, search_id, action, select=None):
+    """Call SearchStep, transparently handling both single-select and multi-select.
+
+    `action` is a list of OPTION-ARRAY POSITIONS (0-based indices into select['option']),
+    exactly like a single-select action -- callers do not need to special-case anything.
+
+    Single-select (`select` is None, or select.get('minCount', 0) <= 1 and
+    select.get('maxCount', 1) <= 1): `action` is sent to SearchStep in one call, as
+    before (this path is unchanged from the original implementation and was already
+    confirmed to return error=0).
+
+    Multi-select (select.get('maxCount', 1) > 1, e.g. minCount=2/maxCount=2 "discard 2
+    cards" effects such as Ultra Ball/effect.id=1121): SearchStep does NOT accept the
+    chosen indices as a single flat list (e.g. action=[0,1]) -- that reliably returns
+    error=4. The confirmed-working encoding is to submit ONE index per SearchStep call,
+    repeated `len(action)` times (normally == minCount == maxCount for these effects).
+    Critically, the select dict returned between picks keeps re-presenting the SAME
+    multi-select prompt (same context/minCount/maxCount/option count) -- it does NOT
+    shrink the option list or decrement remaining picks -- so this wrapper always
+    re-issues each remaining index as `[idx]` against the ORIGINAL option-array
+    positions from the caller's `action` list. Only after exactly `len(action)`
+    single-element calls have been submitted does the select advance to the next
+    decision (confirmed empirically: context flips from 8 to 0 only after the Nth
+    single pick, see findings.md).
+
+    Returns (parsed, raw_text) of the FINAL SearchStep call (the one that actually
+    advances the state). If `action` is empty, makes one call with action=[] (mirrors
+    old behavior for empty selects).
+    """
+    is_multi = bool(select) and (
+        select.get("maxCount", 1) > 1 or select.get("minCount", 0) > 1
+    )
+    if not is_multi or len(action) <= 1:
+        return _search_step_raw(agent_ptr, search_id, action)
+
+    parsed, raw = None, None
+    for idx in action:
+        parsed, raw = _search_step_raw(agent_ptr, search_id, [idx])
+        if parsed.get("error") != 0:
+            # Surface the failing single-pick call immediately; do not keep going.
+            return parsed, raw
+    return parsed, raw
 
 
 def search_end(agent_ptr):
