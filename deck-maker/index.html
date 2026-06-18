@@ -261,6 +261,35 @@
     font-size: 15px;
     color: var(--accent-yellow);
     border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #deck-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  #deck-toggle:hover { border-color: var(--accent-yellow); }
+  #right-pane.list-collapsed #deck-toggle {
+    transform: rotate(-90deg);
+  }
+  #right-pane.list-collapsed #deck-list-container {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    #right-pane.list-collapsed {
+      flex: 0 0 auto;
+    }
   }
   #deck-summary {
     flex: 0 0 auto;
@@ -486,7 +515,7 @@
       </div>
     </section>
     <section id="right-pane" class="pane">
-      <h2>デッキ</h2>
+      <h2>デッキ <button id="deck-toggle" aria-expanded="true" title="デッキ一覧の表示/非表示">&#9662;</button></h2>
       <div id="deck-summary">
         <span class="deck-count" id="deck-count">0</span> / 60枚
       </div>
@@ -513,6 +542,7 @@
   "use strict";
 
   const STORAGE_KEY = "ptcg_deck_builder_v1";
+  const COLLAPSE_KEY = "ptcg_deck_list_collapsed";
   const MAX_COPIES = 4;
   const DECK_SIZE = 60;
 
@@ -883,6 +913,18 @@
 
     document.getElementById("export-btn").addEventListener("click", exportDeck);
     document.getElementById("reset-btn").addEventListener("click", resetDeck);
+
+    const rightPane = document.getElementById("right-pane");
+    const deckToggle = document.getElementById("deck-toggle");
+    if (localStorage.getItem(COLLAPSE_KEY) === "1") {
+      rightPane.classList.add("list-collapsed");
+      deckToggle.setAttribute("aria-expanded", "false");
+    }
+    deckToggle.addEventListener("click", () => {
+      const collapsed = rightPane.classList.toggle("list-collapsed");
+      deckToggle.setAttribute("aria-expanded", String(!collapsed));
+      localStorage.setItem(COLLAPSE_KEY, collapsed ? "1" : "0");
+    });
 
     document.getElementById("modal-close").addEventListener("click", closeModal);
     document.getElementById("modal-overlay").addEventListener("click", (e) => {
