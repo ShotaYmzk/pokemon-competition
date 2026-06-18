@@ -8,6 +8,29 @@ _cards = None
 _attacks = None
 
 
+def _deck_supported_by_engine(deck):
+    try:
+        import ctypes
+        import json as _json
+
+        from kaggle_environments.envs.cabt.cg.sim import lib
+
+        lib.AllCard.restype = ctypes.c_char_p
+        card_ids = {c["cardId"] for c in _json.loads(lib.AllCard().decode())}
+        return all(cid in card_ids for cid in deck)
+    except Exception:
+        return True
+
+
+def _fallback_engine_deck():
+    try:
+        from kaggle_environments.envs.cabt.cabt import deck as engine_deck
+
+        return list(engine_deck)
+    except Exception:
+        return None
+
+
 def _deck_candidates(config=None):
     candidates = []
 
@@ -47,6 +70,10 @@ def _load_deck(config=None):
             with open(deck_path) as f:
                 _deck = [int(line.strip()) for line in f if line.strip()]
             assert len(_deck) == 60, f"deck.csv must have 60 cards, got {len(_deck)}"
+            if not _deck_supported_by_engine(_deck):
+                fallback = _fallback_engine_deck()
+                if fallback is not None:
+                    _deck = fallback
             return _deck
     raise FileNotFoundError(f"deck.csv not found in: {candidates}")
 

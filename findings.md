@@ -379,3 +379,9 @@ budget/move (3000s / ~70手) = 42.9秒/手 -> 1手あたり約100万回のSearch
 ### T0-2: SearchBegin は山札の「順序」を使うか「構成」だけか — 決定的実験結果
 **結論: 順序は挙動に影響する（順序も意味を持つ）。** 同一構成（同じ60枚の多重集合）だが異なる順序で `your_deck`/`opp_deck` を渡し、同一の決定論的アクション列（固定シードの `random.sample`）を流したところ、両者の `select.option` 数・文脈の遷移列が**一致しなかった**（`explore/step9_t0_timing_and_order.py` の `t0_2_order_vs_composition`）。これは妥当な結果である: ドロー処理は「配列の先頭から順に引く」実装になっているはずなので、順序を変えれば「次に引かれるカード」が変わり、その後の手札・選択肢が変化するのは当然である。
 **実務上の含意**: 決定化のたびに厳密な順序を再現する必要はない（そもそも本物の山札順序は隠されており知り得ない）。標準的な IS-MCTS のルートサンプリング方式どおり、**各ロールアウト（あるいは各決定点）ごとに、構成が正しい山札をランダムに並べ直してSearchBeginし直す**ことで、順序依存性は「サンプリングの分散」として吸収すればよい。これは T2 のMCTS設計（「毎手フレッシュにSearchBegin」）と整合する。
+
+## 2026-06-18: 上位リプレイ収集と模倣学習データ抽出
+
+- **変更**: `datasets/collect_top_replays.py` と `datasets/extract_replay_dataset.py` を追加し、上位5チームから10公開リプレイを `datasets/top_replays/` に収集した。抽出結果は20デッキ、模倣候補4226行、`valid_select_action` 2154行。
+- **理由**: Kaggle CLI の公開 replay は `steps` に `observation` と `action` を含むため、ログ403でもデッキ解析と imitation learning の教師候補に使える。`action` は観測の次stepに記録されるため、抽出は `next-step` alignment をデフォルトにした。
+- **検証**: `python -m py_compile datasets/collect_top_replays.py datasets/extract_replay_dataset.py`、`python datasets/collect_top_replays.py --top-teams 5 --episodes-per-submission 2 --max-replays 10 --out-dir datasets/top_replays`、`python datasets/extract_replay_dataset.py --replay-glob 'datasets/top_replays/replays/*.json' --out-dir datasets/top_replays/extracted` が成功。20デッキすべて60枚・未知IDなし・同名4枚制限違反なし。

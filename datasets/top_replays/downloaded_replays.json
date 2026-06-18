@@ -1,0 +1,122 @@
+[
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80483892,
+    "create_time": "2026-06-18 14:05:34.762000",
+    "end_time": "2026-06-18 14:07:59.136000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "onechan1",
+    "score": "1282.4",
+    "path": "datasets/top_replays/replays/80483892.json"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80460699,
+    "create_time": "2026-06-18 10:49:32.604000",
+    "end_time": "2026-06-18 10:52:04.078000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "onechan1",
+    "score": "1282.4",
+    "path": "datasets/top_replays/replays/80460699.json"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80480406,
+    "create_time": "2026-06-18 13:37:33.428000",
+    "end_time": "2026-06-18 13:40:27.962000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "Kyo_s_s",
+    "score": "1237.9",
+    "path": "datasets/top_replays/replays/80480406.json"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80460144,
+    "create_time": "2026-06-18 10:45:34.493000",
+    "end_time": "2026-06-18 10:48:01.705000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "Kyo_s_s",
+    "score": "1237.9",
+    "path": "datasets/top_replays/replays/80460144.json"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80481798,
+    "create_time": "2026-06-18 13:49:32.940000",
+    "end_time": "2026-06-18 13:51:53.740000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "【ＡＩと共に、ＡＩと戦う】",
+    "score": "1229.6",
+    "path": "datasets/top_replays/replays/80481798.json"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80481211,
+    "create_time": "2026-06-18 13:45:36.310000",
+    "end_time": "2026-06-18 13:48:00.303000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "【ＡＩと共に、ＡＩと戦う】",
+    "score": "1229.6",
+    "path": "datasets/top_replays/replays/80481211.json"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80475843,
+    "create_time": "2026-06-18 13:01:35.019000",
+    "end_time": "2026-06-18 13:04:00.972000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "カドラバ Kadoraba",
+    "score": "1228.7",
+    "path": "datasets/top_replays/replays/80475843.json"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80467899,
+    "create_time": "2026-06-18 11:53:32.534000",
+    "end_time": "2026-06-18 11:55:45.065000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "カドラバ Kadoraba",
+    "score": "1228.7",
+    "path": "datasets/top_replays/replays/80467899.json"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80485058,
+    "create_time": "2026-06-18 14:13:33.303000",
+    "end_time": "2026-06-18 14:15:49.901000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "MEP",
+    "score": "1225.9",
+    "path": "datasets/top_replays/replays/80485058.json"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80484485,
+    "create_time": "2026-06-18 14:09:33.269000",
+    "end_time": "2026-06-18 14:11:50.452000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC",
+    "team_name": "MEP",
+    "score": "1225.9",
+    "path": "datasets/top_replays/replays/80484485.json"
+  }
+]

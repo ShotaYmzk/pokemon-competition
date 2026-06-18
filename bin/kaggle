@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Use Kaggle CLI 2.x from project venv (supports KGAT access tokens).
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+exec "$ROOT/env/venv311/bin/kaggle" "$@"

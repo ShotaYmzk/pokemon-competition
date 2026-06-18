@@ -1,0 +1,884 @@
+[
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80483892,
+    "create_time": "2026-06-18 14:05:34.762000",
+    "end_time": "2026-06-18 14:07:59.136000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80460699,
+    "create_time": "2026-06-18 10:49:32.604000",
+    "end_time": "2026-06-18 10:52:04.078000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80436239,
+    "create_time": "2026-06-18 07:25:04.047000",
+    "end_time": "2026-06-18 07:27:38.099000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80408508,
+    "create_time": "2026-06-18 03:09:05.238000",
+    "end_time": "2026-06-18 03:11:23.107000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80380232,
+    "create_time": "2026-06-17 23:00:29.944000",
+    "end_time": "2026-06-17 23:03:01.249000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80376513,
+    "create_time": "2026-06-17 22:24:28.946000",
+    "end_time": "2026-06-17 22:26:53.890000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80372729,
+    "create_time": "2026-06-17 21:49:46.064000",
+    "end_time": "2026-06-17 21:52:19.605000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80369853,
+    "create_time": "2026-06-17 21:25:46.237000",
+    "end_time": "2026-06-17 21:27:57.623000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80367521,
+    "create_time": "2026-06-17 21:05:46.081000",
+    "end_time": "2026-06-17 21:08:20.369000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80364416,
+    "create_time": "2026-06-17 20:37:46.393000",
+    "end_time": "2026-06-17 20:40:01.369000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80360253,
+    "create_time": "2026-06-17 20:00:19.852000",
+    "end_time": "2026-06-17 20:03:27.703000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80353942,
+    "create_time": "2026-06-17 19:04:03.426000",
+    "end_time": "2026-06-17 19:06:27.420000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80353950,
+    "create_time": "2026-06-17 19:04:03.439000",
+    "end_time": "2026-06-17 19:06:20.141000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80348848,
+    "create_time": "2026-06-17 18:19:39.337000",
+    "end_time": "2026-06-17 18:21:50.186000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80348327,
+    "create_time": "2026-06-17 18:15:42.222000",
+    "end_time": "2026-06-17 18:17:55.549000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80345100,
+    "create_time": "2026-06-17 17:47:39.399000",
+    "end_time": "2026-06-17 17:50:26.646000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80338809,
+    "create_time": "2026-06-17 16:47:09.594000",
+    "end_time": "2026-06-17 16:49:24.546000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80336589,
+    "create_time": "2026-06-17 16:26:07.188000",
+    "end_time": "2026-06-17 16:28:20.928000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80336047,
+    "create_time": "2026-06-17 16:22:07.058000",
+    "end_time": "2026-06-17 16:24:46.218000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80335697,
+    "create_time": "2026-06-17 16:18:07.472000",
+    "end_time": "2026-06-17 16:20:34.723000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80335175,
+    "create_time": "2026-06-17 16:14:07.088000",
+    "end_time": "2026-06-17 16:16:27.347000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80334826,
+    "create_time": "2026-06-17 16:10:07.650000",
+    "end_time": "2026-06-17 16:12:19.744000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80334476,
+    "create_time": "2026-06-17 16:06:07.001000",
+    "end_time": "2026-06-17 16:08:19.567000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80333932,
+    "create_time": "2026-06-17 16:02:08.516000",
+    "end_time": "2026-06-17 16:04:27.403000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16382995,
+    "submission_id": 53781334,
+    "episode_id": 80333422,
+    "create_time": "2026-06-17 15:57:54.506000",
+    "end_time": "2026-06-17 16:00:26.256000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_VALIDATION"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80480406,
+    "create_time": "2026-06-18 13:37:33.428000",
+    "end_time": "2026-06-18 13:40:27.962000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80460144,
+    "create_time": "2026-06-18 10:45:34.493000",
+    "end_time": "2026-06-18 10:48:01.705000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80436239,
+    "create_time": "2026-06-18 07:25:04.047000",
+    "end_time": "2026-06-18 07:27:38.099000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80417083,
+    "create_time": "2026-06-18 04:29:03.024000",
+    "end_time": "2026-06-18 04:31:16.897000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80383992,
+    "create_time": "2026-06-17 23:36:27.918000",
+    "end_time": "2026-06-17 23:38:49.150000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80378818,
+    "create_time": "2026-06-17 22:48:28.315000",
+    "end_time": "2026-06-17 22:51:00.432000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80372707,
+    "create_time": "2026-06-17 21:49:46.040000",
+    "end_time": "2026-06-17 21:52:26.843000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80369487,
+    "create_time": "2026-06-17 21:21:47.678000",
+    "end_time": "2026-06-17 21:24:27.398000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80368638,
+    "create_time": "2026-06-17 21:13:45.951000",
+    "end_time": "2026-06-17 21:16:05.462000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80365460,
+    "create_time": "2026-06-17 20:45:46.088000",
+    "end_time": "2026-06-17 20:48:12.921000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80359446,
+    "create_time": "2026-06-17 19:52:20.603000",
+    "end_time": "2026-06-17 19:54:43.315000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80350454,
+    "create_time": "2026-06-17 18:31:39.750000",
+    "end_time": "2026-06-17 18:33:57.608000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80348327,
+    "create_time": "2026-06-17 18:15:42.222000",
+    "end_time": "2026-06-17 18:17:55.549000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80337112,
+    "create_time": "2026-06-17 16:30:07.486000",
+    "end_time": "2026-06-17 16:32:21.125000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80318283,
+    "create_time": "2026-06-17 13:42:12.974000",
+    "end_time": "2026-06-17 13:44:48.600000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80292689,
+    "create_time": "2026-06-17 09:42:06.881000",
+    "end_time": "2026-06-17 09:44:16.016000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80274139,
+    "create_time": "2026-06-17 06:46:07.239000",
+    "end_time": "2026-06-17 06:48:35.912000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80253888,
+    "create_time": "2026-06-17 03:10:10.054000",
+    "end_time": "2026-06-17 03:12:27.569000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80253882,
+    "create_time": "2026-06-17 03:10:10.054000",
+    "end_time": "2026-06-17 03:12:25.224000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80253044,
+    "create_time": "2026-06-17 03:02:07.276000",
+    "end_time": "2026-06-17 03:04:40.443000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80252701,
+    "create_time": "2026-06-17 02:58:09.979000",
+    "end_time": "2026-06-17 03:00:30.101000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80252178,
+    "create_time": "2026-06-17 02:54:09.325000",
+    "end_time": "2026-06-17 02:56:28.236000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80251834,
+    "create_time": "2026-06-17 02:50:07.235000",
+    "end_time": "2026-06-17 02:52:13.244000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16376533,
+    "submission_id": 53760816,
+    "episode_id": 80251230,
+    "create_time": "2026-06-17 02:45:37.286000",
+    "end_time": "2026-06-17 02:48:08.882000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_VALIDATION"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80481798,
+    "create_time": "2026-06-18 13:49:32.940000",
+    "end_time": "2026-06-18 13:51:53.740000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80481211,
+    "create_time": "2026-06-18 13:45:36.310000",
+    "end_time": "2026-06-18 13:48:00.303000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80480816,
+    "create_time": "2026-06-18 13:41:33.846000",
+    "end_time": "2026-06-18 13:43:46.293000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80480425,
+    "create_time": "2026-06-18 13:37:33.475000",
+    "end_time": "2026-06-18 13:39:37.980000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80480024,
+    "create_time": "2026-06-18 13:33:35.610000",
+    "end_time": "2026-06-18 13:36:08.758000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80479639,
+    "create_time": "2026-06-18 13:29:34.072000",
+    "end_time": "2026-06-18 13:32:00.593000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80479592,
+    "create_time": "2026-06-18 13:29:33.965000",
+    "end_time": "2026-06-18 13:31:48.179000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80479045,
+    "create_time": "2026-06-18 13:25:35.123000",
+    "end_time": "2026-06-18 13:27:56.331000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80478489,
+    "create_time": "2026-06-18 13:21:33.296000",
+    "end_time": "2026-06-18 13:23:46.768000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80477918,
+    "create_time": "2026-06-18 13:17:32.907000",
+    "end_time": "2026-06-18 13:19:46.993000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80477381,
+    "create_time": "2026-06-18 13:13:33.031000",
+    "end_time": "2026-06-18 13:15:45.749000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80476945,
+    "create_time": "2026-06-18 13:09:33.026000",
+    "end_time": "2026-06-18 13:12:17.996000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80476377,
+    "create_time": "2026-06-18 13:05:41.680000",
+    "end_time": "2026-06-18 13:07:49.869000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16372993,
+    "submission_id": 53808873,
+    "episode_id": 80476253,
+    "create_time": "2026-06-18 13:02:30.374000",
+    "end_time": "2026-06-18 13:04:49.469000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_VALIDATION"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80475843,
+    "create_time": "2026-06-18 13:01:35.019000",
+    "end_time": "2026-06-18 13:04:00.972000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80467899,
+    "create_time": "2026-06-18 11:53:32.534000",
+    "end_time": "2026-06-18 11:55:45.065000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80457122,
+    "create_time": "2026-06-18 10:21:33.135000",
+    "end_time": "2026-06-18 10:23:59.449000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80453055,
+    "create_time": "2026-06-18 09:45:08.156000",
+    "end_time": "2026-06-18 09:47:26.777000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80442304,
+    "create_time": "2026-06-18 08:13:02.618000",
+    "end_time": "2026-06-18 08:15:16.532000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80441735,
+    "create_time": "2026-06-18 08:09:02.532000",
+    "end_time": "2026-06-18 08:11:23.163000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80441196,
+    "create_time": "2026-06-18 08:05:05.746000",
+    "end_time": "2026-06-18 08:07:24.020000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80440645,
+    "create_time": "2026-06-18 08:01:03.544000",
+    "end_time": "2026-06-18 08:03:16.833000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80440272,
+    "create_time": "2026-06-18 07:57:04.722000",
+    "end_time": "2026-06-18 07:59:21.172000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80439715,
+    "create_time": "2026-06-18 07:53:02.522000",
+    "end_time": "2026-06-18 07:55:13.921000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80439168,
+    "create_time": "2026-06-18 07:49:02.316000",
+    "end_time": "2026-06-18 07:51:15.252000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80438781,
+    "create_time": "2026-06-18 07:45:07.860000",
+    "end_time": "2026-06-18 07:47:19.061000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80438245,
+    "create_time": "2026-06-18 07:41:02.498000",
+    "end_time": "2026-06-18 07:43:34.359000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80437835,
+    "create_time": "2026-06-18 07:37:02.273000",
+    "end_time": "2026-06-18 07:39:27.633000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80437280,
+    "create_time": "2026-06-18 07:33:02.568000",
+    "end_time": "2026-06-18 07:35:18.698000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80436745,
+    "create_time": "2026-06-18 07:29:02.498000",
+    "end_time": "2026-06-18 07:31:24.399000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80436176,
+    "create_time": "2026-06-18 07:25:03.978000",
+    "end_time": "2026-06-18 07:27:20.026000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80435799,
+    "create_time": "2026-06-18 07:21:03.757000",
+    "end_time": "2026-06-18 07:23:22.497000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16377364,
+    "submission_id": 53800247,
+    "episode_id": 80435324,
+    "create_time": "2026-06-18 07:14:48.396000",
+    "end_time": "2026-06-18 07:17:14.709000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_VALIDATION"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80485058,
+    "create_time": "2026-06-18 14:13:33.303000",
+    "end_time": "2026-06-18 14:15:49.901000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80484485,
+    "create_time": "2026-06-18 14:09:33.269000",
+    "end_time": "2026-06-18 14:11:50.452000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80483892,
+    "create_time": "2026-06-18 14:05:34.762000",
+    "end_time": "2026-06-18 14:07:59.136000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80483265,
+    "create_time": "2026-06-18 14:01:33.316000",
+    "end_time": "2026-06-18 14:03:39.469000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80482746,
+    "create_time": "2026-06-18 13:57:33.361000",
+    "end_time": "2026-06-18 13:59:49.838000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80482323,
+    "create_time": "2026-06-18 13:53:33.096000",
+    "end_time": "2026-06-18 13:55:40.058000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80481753,
+    "create_time": "2026-06-18 13:49:32.845000",
+    "end_time": "2026-06-18 13:52:01.870000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80481174,
+    "create_time": "2026-06-18 13:45:36.138000",
+    "end_time": "2026-06-18 13:47:57.647000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80480792,
+    "create_time": "2026-06-18 13:41:33.439000",
+    "end_time": "2026-06-18 13:43:50.273000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80480388,
+    "create_time": "2026-06-18 13:37:33.368000",
+    "end_time": "2026-06-18 13:39:46.242000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80479983,
+    "create_time": "2026-06-18 13:33:35.513000",
+    "end_time": "2026-06-18 13:36:06.040000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80479584,
+    "create_time": "2026-06-18 13:29:33.947000",
+    "end_time": "2026-06-18 13:31:56.695000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80479020,
+    "create_time": "2026-06-18 13:25:35.030000",
+    "end_time": "2026-06-18 13:28:03.423000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80478461,
+    "create_time": "2026-06-18 13:21:33.080000",
+    "end_time": "2026-06-18 13:23:52.490000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80477900,
+    "create_time": "2026-06-18 13:17:32.883000",
+    "end_time": "2026-06-18 13:19:49.668000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_PUBLIC"
+  },
+  {
+    "team_id": 16386171,
+    "submission_id": 53809128,
+    "episode_id": 80477782,
+    "create_time": "2026-06-18 13:13:46.010000",
+    "end_time": "2026-06-18 13:15:57.661000",
+    "state": "EpisodeState.COMPLETED",
+    "episode_type": "EpisodeType.EPISODE_TYPE_VALIDATION"
+  }
+]

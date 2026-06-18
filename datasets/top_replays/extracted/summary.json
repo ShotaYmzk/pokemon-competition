@@ -1,0 +1,151 @@
+{
+  "replay_glob": "datasets/top_replays/replays/*.json",
+  "replay_files": 10,
+  "deck_card_rows": 357,
+  "deck_order_rows": 20,
+  "imitation_examples": 4226,
+  "include_current": false,
+  "label_alignment": "next-step",
+  "summaries": [
+    {
+      "path": "datasets/top_replays/replays/80460144.json",
+      "episode_id": 80460144,
+      "steps": 270,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 536,
+      "examples": 536,
+      "valid_action_count": 272,
+      "invalid_action_count": 264
+    },
+    {
+      "path": "datasets/top_replays/replays/80460699.json",
+      "episode_id": 80460699,
+      "steps": 298,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 592,
+      "examples": 592,
+      "valid_action_count": 303,
+      "invalid_action_count": 289
+    },
+    {
+      "path": "datasets/top_replays/replays/80467899.json",
+      "episode_id": 80467899,
+      "steps": 130,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 257,
+      "examples": 257,
+      "valid_action_count": 128,
+      "invalid_action_count": 129
+    },
+    {
+      "path": "datasets/top_replays/replays/80475843.json",
+      "episode_id": 80475843,
+      "steps": 208,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 413,
+      "examples": 413,
+      "valid_action_count": 206,
+      "invalid_action_count": 207
+    },
+    {
+      "path": "datasets/top_replays/replays/80480406.json",
+      "episode_id": 80480406,
+      "steps": 361,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 719,
+      "examples": 719,
+      "valid_action_count": 362,
+      "invalid_action_count": 357
+    },
+    {
+      "path": "datasets/top_replays/replays/80481211.json",
+      "episode_id": 80481211,
+      "steps": 232,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 460,
+      "examples": 460,
+      "valid_action_count": 236,
+      "invalid_action_count": 224
+    },
+    {
+      "path": "datasets/top_replays/replays/80481798.json",
+      "episode_id": 80481798,
+      "steps": 167,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 330,
+      "examples": 330,
+      "valid_action_count": 176,
+      "invalid_action_count": 154
+    },
+    {
+      "path": "datasets/top_replays/replays/80483892.json",
+      "episode_id": 80483892,
+      "steps": 165,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 327,
+      "examples": 327,
+      "valid_action_count": 163,
+      "invalid_action_count": 164
+    },
+    {
+      "path": "datasets/top_replays/replays/80484485.json",
+      "episode_id": 80484485,
+      "steps": 179,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 354,
+      "examples": 354,
+      "valid_action_count": 189,
+      "invalid_action_count": 165
+    },
+    {
+      "path": "datasets/top_replays/replays/80485058.json",
+      "episode_id": 80485058,
+      "steps": 121,
+      "deck_players": [
+        0,
+        1
+      ],
+      "deck_action_count": 2,
+      "select_count": 238,
+      "examples": 238,
+      "valid_action_count": 119,
+      "invalid_action_count": 119
+    }
+  ]
+}

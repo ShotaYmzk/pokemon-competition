@@ -22,16 +22,27 @@ python explore/step4_selfplay.py
 python explore/step5_v2_search_api.py
 ```
 
-## Kaggle 認証（未設定）
-提出には `~/.kaggle/kaggle.json` が必要。
-Kaggle サイト (https://www.kaggle.com/settings/account) から API キーを取得して配置すること。
+## Kaggle 認証
+
+トークンは `~/.kaggle/access_token` に配置済み。`kaggle` コマンドは 2.2.x（`kaggle --version` で確認）。
+
+```bash
+kaggle competitions list -p 1   # 動作確認
+# または ./bin/kaggle ... （venv 未 activate 時）
+```
+
+詳細: `.codex/kaggle-cli.md`
 
 ## 提出
 
 ```bash
-cd agent
-tar -czvf ../submission.tar.gz main.py deck.csv
-# → Kaggle コンペページからブラウザでアップロード
+source env/venv311/bin/activate
+./explore/build_submission.sh
+tar -tzf submission.tar.gz
+
+kaggle competitions submit pokemon-tcg-ai-battle \
+  -f submission.tar.gz \
+  -m "your message"
 ```
 
 ## デッキ可視化（カード画像つきで確認）

@@ -97,8 +97,13 @@
     background: var(--bg-panel);
   }
   @media (max-width: 900px) {
-    #right-pane { max-width: none; flex: 0 0 45%; border-top: 2px solid var(--border); }
-    #left-pane { flex: 1 1 55%; }
+    #right-pane {
+      max-width: none;
+      max-height: 36vh;
+      flex: 0 0 auto;
+      border-top: 2px solid var(--border);
+    }
+    #left-pane { flex: 1 1 auto; }
   }
 
   .filters {
@@ -333,6 +338,7 @@
   @media (max-width: 900px) {
     #right-pane.list-collapsed {
       flex: 0 0 auto;
+      max-height: none;
     }
   }
   #deck-summary {
@@ -985,7 +991,10 @@
 
     const rightPane = document.getElementById("right-pane");
     const deckToggle = document.getElementById("deck-toggle");
-    if (localStorage.getItem(COLLAPSE_KEY) === "1") {
+    const savedCollapse = localStorage.getItem(COLLAPSE_KEY);
+    const shouldCollapseDeck = savedCollapse === "1" ||
+      (savedCollapse == null && window.matchMedia("(max-width: 900px)").matches);
+    if (shouldCollapseDeck) {
       rightPane.classList.add("list-collapsed");
       deckToggle.setAttribute("aria-expanded", "false");
     }
