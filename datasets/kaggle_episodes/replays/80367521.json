@@ -1,0 +1,79 @@
+{
+  "episode": {
+    "id": 80367521,
+    "createTime": "2026-06-17T21:05:46.081880Z",
+    "endTime": "2026-06-17T21:08:20.369680800Z",
+    "state": "COMPLETED",
+    "type": "EPISODE_TYPE_PUBLIC",
+    "agents": [
+      {
+        "id": 179419559,
+        "submissionId": 53781334,
+        "reward": 1,
+        "initialScore": 1270.4770604407356,
+        "updatedScore": 1282.6751244067577,
+        "teamId": 16382995
+      },
+      {
+        "id": 179419560,
+        "submissionId": 53781346,
+        "reward": -1,
+        "index": 1,
+        "initialScore": 1142.177402784632,
+        "updatedScore": 1129.1611644877894,
+        "teamId": 16372862
+      }
+    ],
+    "seed": 1557798844
+  },
+  "teams": [
+    {
+      "id": 16372862,
+      "teamName": "sbite0138",
+      "competitionId": 116727,
+      "teamLeaderId": 4296808,
+      "submissionCount": 2,
+      "lastSubmissionDate": "2026-06-17T15:58:15.306666700Z",
+      "publicLeaderboardSubmissionId": 53781346,
+      "publicLeaderboardScoreFormatted": "1108.1",
+      "teamMembers": [
+        {
+          "displayName": "sbite0138",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4296808-kg.jpg",
+          "url": "/sbite0138",
+          "userName": "sbite0138",
+          "tier": "CONTRIBUTOR",
+          "id": 4296808,
+          "profileUrl": "/sbite0138",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 4296808,
+          "progressionOptOut": false
+        }
+      ]
+    },
+    {
+      "id": 16382995,
+      "teamName": "onechan1",
+      "competitionId": 116727,
+      "teamLeaderId": 35146970,
+      "submissionCount": 1,
+      "lastSubmissionDate": "2026-06-17T15:57:54.346666700Z",
+      "publicLeaderboardSubmissionId": 53781334,
+      "publicLeaderboardScoreFormatted": "1308.7",
+      "teamMembers": [
+        {
+          "displayName": "onechan1",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/onechan1",
+          "userName": "onechan1",
+          "tier": "CONTRIBUTOR",
+          "id": 35146970,
+          "profileUrl": "/onechan1",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 35146970,
+          "progressionOptOut": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "episode": {
+    "id": 80353950,
+    "createTime": "2026-06-17T19:04:03.439254800Z",
+    "endTime": "2026-06-17T19:06:20.141307800Z",
+    "state": "COMPLETED",
+    "type": "EPISODE_TYPE_PUBLIC",
+    "agents": [
+      {
+        "id": 179386523,
+        "submissionId": 53781334,
+        "reward": 1,
+        "initialScore": 1191.2182925218603,
+        "updatedScore": 1212.8902916050229,
+        "teamId": 16382995
+      },
+      {
+        "id": 179386524,
+        "submissionId": 53773046,
+        "reward": -1,
+        "index": 1,
+        "initialScore": 1137.1520434047873,
+        "updatedScore": 1118.9062252264985,
+        "teamId": 16373853
+      }
+    ],
+    "seed": 888341914
+  },
+  "teams": [
+    {
+      "id": 16373853,
+      "teamName": "DENPA92",
+      "competitionId": 116727,
+      "teamLeaderId": 1943671,
+      "submissionCount": 2,
+      "lastSubmissionDate": "2026-06-17T10:48:16.356666700Z",
+      "publicLeaderboardSubmissionId": 53773046,
+      "publicLeaderboardScoreFormatted": "1230.4",
+      "teamMembers": [
+        {
+          "displayName": "DENPA92",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1943671-kg.jpg",
+          "url": "/denpa92",
+          "userName": "denpa92",
+          "tier": "EXPERT",
+          "id": 1943671,
+          "profileUrl": "/denpa92",
+          "performanceTier": "EXPERT",
+          "userId": 1943671,
+          "progressionOptOut": false
+        },
+        {
+          "displayName": "dereview",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3035911-kg.png?t=2026-04-19-10-50-31",
+          "url": "/viewlagoon",
+          "userName": "viewlagoon",
+          "tier": "MASTER",
+          "id": 3035911,
+          "profileUrl": "/viewlagoon",
+          "performanceTier": "MASTER",
+          "userId": 3035911,
+          "progressionOptOut": true
+        }
+      ]
+    },
+    {
+      "id": 16382995,
+      "teamName": "onechan1",
+      "competitionId": 116727,
+      "teamLeaderId": 35146970,
+      "submissionCount": 1,
+      "lastSubmissionDate": "2026-06-17T15:57:54.346666700Z",
+      "publicLeaderboardSubmissionId": 53781334,
+      "publicLeaderboardScoreFormatted": "1308.7",
+      "teamMembers": [
+        {
+          "displayName": "onechan1",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/onechan1",
+          "userName": "onechan1",
+          "tier": "CONTRIBUTOR",
+          "id": 35146970,
+          "profileUrl": "/onechan1",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 35146970,
+          "progressionOptOut": false
+        }
+      ]
+    }
+  ]
+}

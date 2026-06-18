@@ -50,14 +50,23 @@ def _bind_types():
     ]
 
     lib.SearchStep.restype = ctypes.c_char_p
-    lib.SearchStep.argtypes = [ctypes.c_void_p, ctypes.c_int, IntPtr, ctypes.c_int]
+    # search_id is int64 in the real C signature (confirmed against the official
+    # reference binding in pokemon-tcg-ai-battle/sample_submission/cg/sim.py).
+    # Declaring it as c_int here was an ABI mismatch.
+    lib.SearchStep.argtypes = [ctypes.c_void_p, ctypes.c_int64, IntPtr, ctypes.c_int]
 
     lib.SearchEnd.restype = None
     lib.SearchEnd.argtypes = [ctypes.c_void_p]
 
     if hasattr(lib, "SearchRelease"):
         lib.SearchRelease.restype = None
-        lib.SearchRelease.argtypes = [ctypes.c_void_p]
+        # SearchRelease takes (agent_ptr, search_id: int64). The previous binding
+        # declared only [c_void_p] and called it with a single argument -- an
+        # under-specified C call that leaves search_id reading whatever garbage
+        # was in that register, corrupting the engine's internal search-state
+        # table. This is the likely cause of the sporadic, irreproducible
+        # error=5 failures recorded in findings.md STEP 8.
+        lib.SearchRelease.argtypes = [ctypes.c_void_p, ctypes.c_int64]
 
     _TYPES_BOUND = True
 
@@ -110,6 +119,16 @@ def visible_card_ids(obs, player_index):
         from "energies", which are energy TYPE ints, not card IDs).
       - "tools": Pokemon Tool cards attached to this Pokemon.
 
+    IMPORTANT (T1 fix): "stadium" and "looking" are GLOBAL zones on
+    obs["current"] (not nested under either player's PlayerState), so a card a
+    player played there is otherwise invisible to per-player zone accounting --
+    confirmed empirically: a played Stadium card (current.stadium = [{"id":...,
+    "playerIndex": p}]) caused the reconstructed 60-card multiset for player p
+    to come up exactly 1 card short, because no per-zone count (deck/hand/
+    prize/discard/active/bench) included it. Both zones are owned by whichever
+    player's card is in them (per the "playerIndex" field on each entry), so we
+    filter by player_index here.
+
     NOTE: "prize" is deliberately EXCLUDED here. Prize cards are real physical
     cards already removed from deckCount at game start, but their identity stays
     hidden (`null`) until taken -- they are not "visible" in the sense of a known
@@ -129,6 +148,12 @@ def visible_card_ids(obs, player_index):
                 ids.extend(card_ids(card.get("preEvolution")))
                 ids.extend(card_ids(card.get("energyCards")))
                 ids.extend(card_ids(card.get("tools")))
+    for zone in ("stadium", "looking"):
+        for card in obs["current"].get(zone) or []:
+            if isinstance(card, dict) and card.get("playerIndex") == player_index:
+                cid = card.get("id", card.get("cardId"))
+                if isinstance(cid, int):
+                    ids.append(cid)
     return ids
 
 
@@ -234,12 +259,12 @@ def search_step(agent_ptr, search_id, action, select=None):
     return parsed, raw
 
 
-def search_end(agent_ptr):
+def search_end(agent_ptr, search_id=0):
     """Call SearchEnd to release the search chain (and SearchRelease if available)."""
     _bind_types()
     lib.SearchEnd(agent_ptr)
     if hasattr(lib, "SearchRelease"):
-        lib.SearchRelease(agent_ptr)
+        lib.SearchRelease(agent_ptr, search_id)
 
 
 def first_valid_search_action(select):

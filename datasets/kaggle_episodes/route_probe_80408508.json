@@ -1,0 +1,78 @@
+{
+  "episode_keys": [
+    "id",
+    "createTime",
+    "endTime",
+    "state",
+    "type",
+    "agents",
+    "seed"
+  ],
+  "team_keys": [
+    [
+      "id",
+      "teamName",
+      "competitionId",
+      "teamLeaderId",
+      "submissionCount",
+      "lastSubmissionDate",
+      "publicLeaderboardSubmissionId",
+      "publicLeaderboardScoreFormatted",
+      "teamMembers"
+    ],
+    [
+      "id",
+      "teamName",
+      "competitionId",
+      "teamLeaderId",
+      "submissionCount",
+      "lastSubmissionDate",
+      "publicLeaderboardSubmissionId",
+      "publicLeaderboardScoreFormatted",
+      "teamMembers"
+    ]
+  ],
+  "heroz": {
+    "url": "https://ptcgvis.heroz.jp/Visualizer/Replay/80408508/0",
+    "status": 400,
+    "snippet": "not found",
+    "has_nonempty_replay_data": false
+  },
+  "kaggle": [
+    {
+      "method": "GET",
+      "url": "https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/simulations",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>The Pok&#xE9;mon Company - PTCG AI Battle Challenge Simulation | Kaggle</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Build an AI Training Agent to play the Pok&#x"
+    },
+    {
+      "method": "GET",
+      "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/ListEpisodeAgents?episodeId=80408508",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and la"
+    },
+    {
+      "method": "GET",
+      "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisodeReplay?episodeId=80408508",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and la"
+    },
+    {
+      "method": "POST",
+      "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/ListEpisodeAgents",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and la"
+    },
+    {
+      "method": "POST",
+      "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisodeReplay",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and la"
+    }
+  ]
+}

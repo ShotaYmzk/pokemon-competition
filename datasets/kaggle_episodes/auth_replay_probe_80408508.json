@@ -1,0 +1,49 @@
+[
+  {
+    "method": "POST",
+    "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisodeReplay",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and labs evaluating agents, models, and frontier technology through crowdsourced benchmarks, competitions, and hackathons.\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maxi"
+  },
+  {
+    "method": "POST",
+    "url": "https://www.kaggle.com/api/i/competitions.EpisodeService/GetEpisode",
+    "status": 200,
+    "content_type": "application/json",
+    "body_prefix": "{\"episode\":{\"id\":80408508,\"createTime\":\"2026-06-18T03:09:05.238321200Z\",\"endTime\":\"2026-06-18T03:11:23.107208Z\",\"state\":\"COMPLETED\",\"type\":\"EPISODE_TYPE_PUBLIC\",\"agents\":[{\"id\":179517523,\"submissionId\":53781334,\"reward\":1,\"initialScore\":1298.3429258698618,\"updatedScore\":1308.705447689525,\"teamId\":16382995},{\"id\":179517524,\"submissionId\":53767018,\"reward\":-1,\"index\":1,\"initialScore\":1195.9511276030848,\"updatedScore\":1184.7408947123572,\"teamId\":16375930}],\"seed\":486837364},\"teams\":[{\"id\":16375930,",
+    "json_keys": [
+      "episode",
+      "teams"
+    ],
+    "saved_json": "datasets/kaggle_episodes/replays/auth_80408508_1.json"
+  },
+  {
+    "method": "POST",
+    "url": "https://www.kaggle.com/api/i/kernel.EpisodeService/GetEpisodeReplay",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and labs evaluating agents, models, and frontier technology through crowdsourced benchmarks, competitions, and hackathons.\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maxi"
+  },
+  {
+    "method": "GET",
+    "url": "https://www.kaggle.com/api/v1/episodes/80408508/replay",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and labs evaluating agents, models, and frontier technology through crowdsourced benchmarks, competitions, and hackathons.\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maxi"
+  },
+  {
+    "method": "GET",
+    "url": "https://www.kaggle.com/api/v1/episodes/80408508",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and labs evaluating agents, models, and frontier technology through crowdsourced benchmarks, competitions, and hackathons.\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maxi"
+  },
+  {
+    "method": "POST",
+    "url": "https://www.kaggle.com/requests/EpisodeService/GetEpisodeReplay",
+    "status": 404,
+    "content_type": "text/html; charset=utf-8",
+    "body_prefix": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n  <title>Kaggle: Your Home for Data Science</title>\r\n  <meta charset=\"utf-8\" />\r\n    <meta name=\"robots\" content=\"index, follow\" />\r\n  <meta name=\"description\" content=\"Discover what actually works in AI. Join millions of builders, researchers, and labs evaluating agents, models, and frontier technology through crowdsourced benchmarks, competitions, and hackathons.\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maxi"
+  }
+]

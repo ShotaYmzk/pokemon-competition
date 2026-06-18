@@ -36,7 +36,7 @@ from explore.step6_forward_model_validation import (
 )
 
 MAX_SEARCH_STEPS = 500
-N_SEEDS = 100
+N_SEEDS = 300
 
 
 def run_one_seed(deck, seed):
@@ -54,7 +54,7 @@ def run_one_seed(deck, seed):
 
     try:
         arrays = sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng)
-    except ValueError as e:
+    except (ValueError, AssertionError) as e:
         battle_finish()
         return {"seed": seed, "status": "determinize_failed", "detail": str(e)}
 

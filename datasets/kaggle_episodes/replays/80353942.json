@@ -1,0 +1,80 @@
+{
+  "episode": {
+    "id": 80353942,
+    "createTime": "2026-06-17T19:04:03.426190600Z",
+    "endTime": "2026-06-17T19:06:27.420610100Z",
+    "state": "COMPLETED",
+    "type": "EPISODE_TYPE_PUBLIC",
+    "agents": [
+      {
+        "id": 179386505,
+        "submissionId": 53783327,
+        "reward": -1,
+        "initialScore": 1165.7438165198478,
+        "updatedScore": 1143.0957550497208,
+        "teamId": 16372196
+      },
+      {
+        "id": 179386506,
+        "submissionId": 53781334,
+        "reward": 1,
+        "index": 1,
+        "initialScore": 1212.8902916050229,
+        "updatedScore": 1233.2476571884438,
+        "teamId": 16382995
+      }
+    ],
+    "seed": 2073205261
+  },
+  "teams": [
+    {
+      "id": 16372196,
+      "teamName": "PyJa",
+      "competitionId": 116727,
+      "teamLeaderId": 20924529,
+      "submissionCount": 2,
+      "lastSubmissionDate": "2026-06-17T19:44:43.480Z",
+      "publicLeaderboardSubmissionId": 53783327,
+      "publicLeaderboardScoreFormatted": "1090.5",
+      "teamUpEnabled": true,
+      "teamMembers": [
+        {
+          "displayName": "PyJa",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20924529-gr.jpg",
+          "url": "/pixiux",
+          "userName": "pixiux",
+          "tier": "EXPERT",
+          "id": 20924529,
+          "profileUrl": "/pixiux",
+          "performanceTier": "EXPERT",
+          "userId": 20924529,
+          "progressionOptOut": false
+        }
+      ]
+    },
+    {
+      "id": 16382995,
+      "teamName": "onechan1",
+      "competitionId": 116727,
+      "teamLeaderId": 35146970,
+      "submissionCount": 1,
+      "lastSubmissionDate": "2026-06-17T15:57:54.346666700Z",
+      "publicLeaderboardSubmissionId": 53781334,
+      "publicLeaderboardScoreFormatted": "1308.7",
+      "teamMembers": [
+        {
+          "displayName": "onechan1",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/onechan1",
+          "userName": "onechan1",
+          "tier": "CONTRIBUTOR",
+          "id": 35146970,
+          "profileUrl": "/onechan1",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 35146970,
+          "progressionOptOut": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest *)",
+      "Bash(python agent/main.py *)",
+      "Bash(python explore/*)",
+      "Bash(python *.py)",
+      "Bash(pip install *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(cat pokemon-tcg-ai-battle/JP_Card_Data.csv)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(curl * | bash *)",
+      "Write(pokemon-tcg-ai-battle/JP_Card_Data.csv)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[hook] ファイル変更: ' && jq -r '.tool_input.file_path // empty'"
+          }
+        ]
+      }
+    ]
+  }
+}

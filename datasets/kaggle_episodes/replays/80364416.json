@@ -1,0 +1,91 @@
+{
+  "episode": {
+    "id": 80364416,
+    "createTime": "2026-06-17T20:37:46.393446600Z",
+    "endTime": "2026-06-17T20:40:01.369599300Z",
+    "state": "COMPLETED",
+    "type": "EPISODE_TYPE_PUBLIC",
+    "agents": [
+      {
+        "id": 179411781,
+        "submissionId": 53781334,
+        "reward": 1,
+        "initialScore": 1249.6631856448364,
+        "updatedScore": 1270.4770604407356,
+        "teamId": 16382995
+      },
+      {
+        "id": 179411782,
+        "submissionId": 53776243,
+        "reward": -1,
+        "index": 1,
+        "initialScore": 1243.6307942326177,
+        "updatedScore": 1222.975083064076,
+        "teamId": 16375930
+      }
+    ],
+    "seed": 464206301
+  },
+  "teams": [
+    {
+      "id": 16375930,
+      "teamName": "くりたんとたけちゃん",
+      "competitionId": 116727,
+      "teamLeaderId": 31154458,
+      "submissionCount": 2,
+      "lastSubmissionDate": "2026-06-17T12:55:23.923333300Z",
+      "publicLeaderboardSubmissionId": 53776243,
+      "publicLeaderboardScoreFormatted": "1179.9",
+      "teamMembers": [
+        {
+          "displayName": "kuritan",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31154458-gr.jpg",
+          "url": "/shaka21",
+          "userName": "shaka21",
+          "tier": "CONTRIBUTOR",
+          "id": 31154458,
+          "profileUrl": "/shaka21",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 31154458,
+          "progressionOptOut": false
+        },
+        {
+          "displayName": "たけちゃん",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/takechang",
+          "userName": "takechang",
+          "tier": "CONTRIBUTOR",
+          "id": 35138110,
+          "profileUrl": "/takechang",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 35138110,
+          "progressionOptOut": false
+        }
+      ]
+    },
+    {
+      "id": 16382995,
+      "teamName": "onechan1",
+      "competitionId": 116727,
+      "teamLeaderId": 35146970,
+      "submissionCount": 1,
+      "lastSubmissionDate": "2026-06-17T15:57:54.346666700Z",
+      "publicLeaderboardSubmissionId": 53781334,
+      "publicLeaderboardScoreFormatted": "1308.7",
+      "teamMembers": [
+        {
+          "displayName": "onechan1",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/onechan1",
+          "userName": "onechan1",
+          "tier": "CONTRIBUTOR",
+          "id": 35146970,
+          "profileUrl": "/onechan1",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 35146970,
+          "progressionOptOut": false
+        }
+      ]
+    }
+  ]
+}

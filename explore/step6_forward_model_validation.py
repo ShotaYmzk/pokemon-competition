@@ -49,6 +49,22 @@ except ImportError:
     )
 
 
+_POKEMON_CARD_IDS = None
+
+
+def _pokemon_card_ids(deck):
+    """Card IDs in `deck` that are Pokemon cards (cardType==0), for guessing a
+    face-down active Pokemon (SearchBegin requires opponent_active to be a
+    Pokemon card ID; error=2 otherwise)."""
+    global _POKEMON_CARD_IDS
+    if _POKEMON_CARD_IDS is None:
+        cards_path = os.path.join(os.path.dirname(__file__), "all_cards.json")
+        with open(cards_path) as f:
+            all_cards = json.load(f)
+        _POKEMON_CARD_IDS = {c["cardId"] for c in all_cards if c.get("cardType") == 0}
+    return {cid for cid in deck if cid in _POKEMON_CARD_IDS}
+
+
 def sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng):
     """Build a LEGAL determinization of hidden information (Task B requirement).
 
@@ -108,6 +124,19 @@ def sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng):
     your_deck_sample = your_deck_sample[: your_player["deckCount"]]
 
     # --- opponent side: prize + hand + deck are all hidden from you ---
+    # IMPORTANT (T1 fix): if the opponent's Active Pokemon is face-down (the
+    # JSON gives active=[None]), that physical card is NEITHER in opp_visible
+    # NOR accounted for by prize/hand/deck counts -- it occupies its own zone.
+    # The previous version silently dropped this card from the reconstructed
+    # 60-card multiset (it never appeared anywhere in the determinized state),
+    # which is exactly the kind of illegal hidden-state construction T1 is
+    # meant to catch and fix. We must sample ONE Pokemon-card guess for it,
+    # subtract it from the opponent's unseen pool before sampling the rest,
+    # and pass it as opp_active to SearchBegin (required: error=2 "Active card
+    # must be the ID of a Pokemon card" otherwise omitted/non-Pokemon ID given).
+    opp_active_raw = opp_player.get("active") or []
+    opp_active_facedown = len(opp_active_raw) > 0 and opp_active_raw[0] is None
+
     opp_unseen = collections.Counter(deck)
     for cid in opp_visible:
         opp_unseen[cid] -= 1
@@ -115,6 +144,19 @@ def sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng):
     for cid, n in opp_unseen.items():
         if n > 0:
             opp_unseen_pool.extend([cid] * n)
+
+    opp_active_sample = []
+    if opp_active_facedown:
+        pokemon_ids = _pokemon_card_ids(deck)
+        candidates = [cid for cid in opp_unseen_pool if cid in pokemon_ids]
+        if not candidates:
+            raise ValueError(
+                "No Pokemon-card candidates left in opp's unseen pool to guess a "
+                "face-down Active Pokemon."
+            )
+        guess = rng.choice(candidates)
+        opp_active_sample = [guess]
+        opp_unseen_pool.remove(guess)
 
     opp_prize_count = len(opp_player["prize"])
     opp_hand_count = opp_player["handCount"]
@@ -132,14 +174,45 @@ def sample_determinized_hidden_state(obs, deck, your_index, opp_index, rng):
     opp_hand_sample = sampled[opp_prize_count: opp_prize_count + opp_hand_count]
     opp_deck_sample = sampled[opp_prize_count + opp_hand_count:]
 
-    return {
+    result = {
         "your_deck": your_deck_sample,
         "your_prize": your_prize_sample,
         "opp_deck": opp_deck_sample,
         "opp_prize": opp_prize_sample,
         "opp_hand": opp_hand_sample,
-        "opp_active": card_ids(opp_player.get("active")),
+        "opp_active": opp_active_sample if opp_active_facedown else card_ids(opp_player.get("active")),
     }
+
+    # T1 legality guard: every zone's count must match what the engine expects,
+    # and the full reconstructed 60-card multiset (visible + hidden) for each
+    # side must equal the known deck composition exactly (no duplicate-beyond-
+    # multiplicity, no missing/extra cards). A violation here means SearchBegin
+    # would silently be handed an illegal hidden state, which is the kind of
+    # bug T1 is meant to catch before it manifests as a downstream engine error.
+    assert len(result["your_deck"]) == your_player["deckCount"], (
+        f"your_deck size {len(result['your_deck'])} != deckCount {your_player['deckCount']}"
+    )
+    assert len(result["your_prize"]) == your_prize_count
+    assert len(result["opp_deck"]) == opp_deck_count
+    assert len(result["opp_prize"]) == opp_prize_count
+    assert len(result["opp_hand"]) == opp_hand_count
+
+    your_reconstructed = collections.Counter(your_visible) + collections.Counter(
+        result["your_deck"]
+    ) + collections.Counter(result["your_prize"])
+    assert your_reconstructed == collections.Counter(deck), (
+        "your-side reconstructed 60-card multiset does not match deck.csv composition"
+    )
+    opp_reconstructed = collections.Counter(opp_visible) + collections.Counter(
+        result["opp_deck"]
+    ) + collections.Counter(result["opp_prize"]) + collections.Counter(
+        result["opp_hand"]
+    ) + collections.Counter(opp_active_sample)
+    assert opp_reconstructed == collections.Counter(deck), (
+        "opp-side reconstructed 60-card multiset does not match deck.csv composition"
+    )
+
+    return result
 
 
 def load_deck():

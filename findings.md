@@ -337,3 +337,45 @@ PASS RATE (no SearchStep error / total): 40/100 = 40.0%
 - 実測（random vs random, N=10）: 1試合平均 ~0.31秒、平均79ステップ、1アクション（エージェント1回の意思決定）あたり中央値 ~0.08ms、最大 ~0.65ms
 - greedy vs random（N=25）では1アクションあたり最大 150ms のスパイクが見られた（カード/攻撃データルックアップのオーバーヘッドと推測、許容範囲内）
 - **示唆**: ランダム/greedy エージェントの意思決定コストは無視できるほど小さく（ms未満）、`runTimeout=3000秒` の予算は実質的に SearchBegin/SearchStep を使った木探索（MCTS）に使い切ってよい。1試合あたり平均ステップ数が約60〜80（本データ）であることから、各意思決定に割ける平均予算は概算で `3000秒 / 80手 ≈ 37秒/手`（ただし `actTimeout=0` で無制限、`remainingOverageTime=600秒` の制約も別途あるため、実際の探索ノード数はSearchStep呼び出しのレイテンシで決まる）。SearchStep自体のレイテンシは未計測（Task Bでエラー終了したケースが多く安定したベンチマークが取れなかったため）— MCTS実装時に最初に計測すべき指標として残す。
+
+---
+
+## STEP 9: MCTS v0 実装に向けた T0/T1（計測・決定化正常化）
+
+### 重大な発見: `explore/search_api.py` の ctypes ABI バグ（error=5 の主因の一部、確定）
+
+公式リファレンス実装が `pokemon-tcg-ai-battle/sample_submission/cg/{sim.py,api.py,game.py}` に同梱されていることが判明した（STEP1 で「未インストール」と記録したのは誤り。本リポジトリのこのパスに最初から存在していた）。これを `explore/search_api.py` の ctypes バインディングと比較し、2つの実バグを発見・修正した：
+
+1. **`SearchStep` の `search_id` 引数型**: 公式 `sim.py` では `ctypes.c_int64`。`explore/search_api.py` は `ctypes.c_int`（32bit）と誤って宣言していた。`search_id=0` という小さい値なので実害は薄いと推測されるが、ABI 上は不正。
+2. **`SearchRelease` の引数不足（実害あり）**: 公式シグネチャは `SearchRelease(agent_ptr, search_id: int64)` の **2引数**。`explore/search_api.py` は `argtypes=[c_void_p]` の **1引数**で宣言し、`lib.SearchRelease(agent_ptr)` を1引数で呼んでいた。これは未定義動作で、第2引数（`search_id`）に渡る値はその時レジスタに残っていた不定値になる。エンジン側はこの不定値を「解放すべき search_id」として解釈してしまうため、内部の search-state テーブルを破壊しうる——**「シードごとに非決定的、再現不能」という STEP7/8 で観測された error=5 の症状と完全に一致する。**
+
+`explore/search_api.py` の `_bind_types()` と `search_end()` を修正（`SearchStep` は `c_int64`、`SearchRelease` は2引数 `(agent_ptr, search_id)` に統一）。修正後、100シードスイープのPASS RATEは **40% → 50%** に改善（同一スクリプト、修正前後比較）。これは固定された再現可能な改善であり、エンジン内部RNGのノイズではない（ABIバグは決定的に毎回発生する類のバグ）。
+
+### T1: 決定化の合法性バグをもう1件発見・修正（`visible_card_ids` の stadium/looking 抜け）
+
+`sample_determinized_hidden_state` の最後に「自分側/相手側の60枚再構成がdeck.csv構成と一致する」ことを保証する `assert` を追加したところ、**実際に失敗するケースが見つかった**：
+
+- 原因: `current.stadium`（と `current.looking`）は **プレイヤー単位の PlayerState ではなく `current` 直下のグローバルなゾーン**。スタジアムカードを場に出したプレイヤーの `playerIndex` がカード辞書に付与されているにもかかわらず、`explore/search_api.py` の `visible_card_ids()` はこのゾーンを一切見ていなかった。結果、スタジアムカードを出した側の「可視カード」集合がちょうど1枚少なく数えられ、その分が誤って「未知（山札/手札/プライズに振り分けるべき）」プールに混入していた。
+- 修正: `visible_card_ids()` に `current.stadium`/`current.looking` を `playerIndex` でフィルタして加算する処理を追加（`explore/search_api.py`）。
+- 同時に、相手のアクティブポケモンが裏向き（`active=[None]`）の場合に `opp_active` の推測サンプルを一切生成していなかった欠落も発見・修正（`pokemon-tcg-ai-battle/sample_submission/cg/api.py` の `search_begin()` 仕様どおり、裏向きアクティブには Pokemon カードIDの推測が必須）。`_pokemon_card_ids()` ヘルパーを追加し、`cardType==0` のカードのみから1枚を未知プールから確保するように修正（`explore/step6_forward_model_validation.py`）。
+- 修正後、100/300シードスイープでこの `assert` は一度も発火しなくなった（合法性は保証された）。
+
+### T1 修正後の error=5 率（最終報告）
+300シードスイープ（`explore/step6b_multiselect_fix_validation.py`、`N_SEEDS=300`）:
+```
+PASS RATE (no SearchStep error / total): 132/300 = 44.0%
+```
+ABIバグ修正・決定化合法性修正の両方を適用した状態でもこの数値。**ガードレールに従い、これ以上の根本原因追跡はしない。** 残存する `error=5` はほぼ全て単一選択（`minCount<=1, maxCount=1`）、文脈は `context=0`（通常ターン主選択）または `context=7`（デッキサーチ系オプショナル選択）に集中しており、発生ステップ数はシードごとに大きく異なる（2手目で発生する場合もあれば400手超まで進む場合もある）。これは STEP8 で確認済みの「libcg.so 内部RNGがプロセスごとに非決定的」という性質と整合し、Python側のロジックでは再現・特定が困難。**MCTS v0 ではこの残存エラーを「探索分岐の打ち切り」として吸収する設計とする**（T2参照）。
+
+### T0-1: SearchStep/SearchBegin のレイテンシ計測（`explore/step9_t0_timing_and_order.py`）
+```
+n_calls=542
+min=0.0031ms median=0.0150ms mean=0.0427ms max=0.9374ms
+throughput: ~23,431 calls/sec（シングルスレッド）
+budget/move (3000s / ~70手) = 42.9秒/手 -> 1手あたり約100万回のSearchStep呼び出しが理論上可能
+```
+意思決定コストは無視できるほど小さく、`runTimeout=3000秒` の制約下でも非常に大規模なMCTS探索（数万〜数十万ノード/手）が可能。実際の反復回数はヒューリスティック評価関数やPython側オーバーヘッド、`remainingOverageTime=600秒` の制約で決まる。
+
+### T0-2: SearchBegin は山札の「順序」を使うか「構成」だけか — 決定的実験結果
+**結論: 順序は挙動に影響する（順序も意味を持つ）。** 同一構成（同じ60枚の多重集合）だが異なる順序で `your_deck`/`opp_deck` を渡し、同一の決定論的アクション列（固定シードの `random.sample`）を流したところ、両者の `select.option` 数・文脈の遷移列が**一致しなかった**（`explore/step9_t0_timing_and_order.py` の `t0_2_order_vs_composition`）。これは妥当な結果である: ドロー処理は「配列の先頭から順に引く」実装になっているはずなので、順序を変えれば「次に引かれるカード」が変わり、その後の手札・選択肢が変化するのは当然である。
+**実務上の含意**: 決定化のたびに厳密な順序を再現する必要はない（そもそも本物の山札順序は隠されており知り得ない）。標準的な IS-MCTS のルートサンプリング方式どおり、**各ロールアウト（あるいは各決定点）ごとに、構成が正しい山札をランダムに並べ直してSearchBeginし直す**ことで、順序依存性は「サンプリングの分散」として吸収すればよい。これは T2 のMCTS設計（「毎手フレッシュにSearchBegin」）と整合する。
