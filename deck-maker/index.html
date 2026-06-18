@@ -143,6 +143,18 @@
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 10px;
   }
+  @media (max-width: 900px) {
+    #card-list {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+  }
+  @media (max-width: 480px) {
+    #card-list {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+    }
+  }
 
   .card-tile {
     position: relative;
@@ -152,6 +164,12 @@
     padding: 10px;
     cursor: pointer;
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  }
+  @media (max-width: 900px) {
+    .card-tile {
+      padding: 4px;
+      border-radius: 6px;
+    }
   }
   .card-tile:hover {
     transform: scale(1.04);
@@ -184,6 +202,19 @@
     color: var(--text-dim);
     line-height: 1.5;
   }
+  @media (max-width: 900px) {
+    .card-tile .name {
+      font-size: 11px;
+      margin: 4px 0 2px;
+      padding-right: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-tile .meta {
+      display: none;
+    }
+  }
   .add-btn {
     position: absolute;
     top: 6px;
@@ -201,6 +232,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  @media (max-width: 900px) {
+    .add-btn {
+      width: 20px;
+      height: 20px;
+      font-size: 13px;
+      top: 4px;
+      right: 4px;
+    }
   }
   .add-btn:hover { background: #fff; }
   .add-btn:disabled { background: #555; color: #999; cursor: not-allowed; }
