@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポケモンTCG デッキビルダー</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root {
+    --bg: #1a2744;
+    --bg-panel: #223158;
+    --bg-card: #2a3a66;
+    --accent-yellow: #ffcc00;
+    --accent-red: #e3350d;
+    --text: #f0f0f0;
+    --text-dim: #aab4cc;
+    --border: #3a4a78;
+
+    --type-草: #5fab41;
+    --type-炎: #e8742c;
+    --type-水: #4a90d9;
+    --type-雷: #f0c419;
+    --type-超: #9b59b6;
+    --type-闘: #8b5a2b;
+    --type-悪: #4b3b59;
+    --type-鋼: #b0b8c0;
+    --type-竜: #1a3a6e;
+    --type-無: #999999;
+    --type-虹: #c084fc;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  header {
+    flex: 0 0 auto;
+    background: linear-gradient(90deg, var(--accent-red), #b8270a);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--accent-yellow);
+    letter-spacing: 1px;
+  }
+  header .status {
+    font-size: 13px;
+    color: #fff;
+  }
+
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  @media (max-width: 900px) {
+    main { flex-direction: column; }
+  }
+
+  .pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #left-pane {
+    flex: 1 1 60%;
+    border-right: 2px solid var(--border);
+    background: var(--bg);
+  }
+  #right-pane {
+    flex: 1 1 40%;
+    max-width: 420px;
+    background: var(--bg-panel);
+  }
+  @media (max-width: 900px) {
+    #right-pane { max-width: none; flex: 0 0 45%; border-top: 2px solid var(--border); }
+    #left-pane { flex: 1 1 55%; }
+  }
+
+  .filters {
+    flex: 0 0 auto;
+    padding: 10px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filters input[type=text] {
+    flex: 1 1 200px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 14px;
+  }
+  .filters select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 13px;
+  }
+  .filters .count {
+    width: 100%;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  #card-list-container {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 12px;
+  }
+  #card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .card-tile {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  }
+  .card-tile:hover {
+    transform: scale(1.04);
+    border-color: var(--accent-yellow);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+  .card-tile .type-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    border-radius: 8px 8px 0 0;
+  }
+  .card-tile .thumb {
+    width: 100%;
+    aspect-ratio: 3 / 4.2;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #11192e;
+    margin-top: 4px;
+  }
+  .card-tile .name {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 6px 0 4px;
+    padding-right: 22px;
+  }
+  .card-tile .meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .add-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+    color: #1a2744;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .add-btn:hover { background: #fff; }
+  .add-btn:disabled { background: #555; color: #999; cursor: not-allowed; }
+
+  .type-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  /* Right pane - deck */
+  #right-pane h2 {
+    margin: 0;
+    padding: 12px;
+    font-size: 15px;
+    color: var(--accent-yellow);
+    border-bottom: 1px solid var(--border);
+  }
+  #deck-summary {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  #deck-summary .deck-count {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--accent-yellow);
+  }
+  #deck-summary .deck-count.over {
+    color: var(--accent-red);
+  }
+  #deck-list-container {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px 12px;
+  }
+  .deck-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .deck-row .dname {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .deck-row button {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .deck-row button:hover { background: var(--accent-red); color: #fff; }
+  .deck-row .dcount {
+    width: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .deck-row .remove {
+    color: var(--accent-red);
+    font-weight: bold;
+  }
+
+  #deck-actions {
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+  #deck-actions button {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  #export-btn { background: var(--accent-yellow); color: #1a2744; }
+  #export-btn:hover { background: #ffe066; }
+  #reset-btn { background: var(--accent-red); color: #fff; }
+  #reset-btn:hover { background: #ff5232; }
+
+  /* Modal */
+  #modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  #modal-overlay.open { display: flex; }
+  #modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 90%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+    position: relative;
+  }
+  #modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 22px;
+    cursor: pointer;
+  }
+  #modal-close:hover { color: #fff; }
+  #modal h3 {
+    margin: 0 0 6px;
+    color: var(--accent-yellow);
+    font-size: 20px;
+  }
+  #modal .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  #modal .modal-img {
+    display: block;
+    max-width: 220px;
+    width: 100%;
+    margin: 0 auto 14px;
+    border-radius: 8px;
+    background: #11192e;
+  }
+  #modal .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 14px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  #modal .info-grid div span {
+    color: var(--text-dim);
+  }
+  #modal .attack {
+    background: var(--bg-card);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  #modal .attack .aname {
+    font-weight: bold;
+    color: var(--accent-yellow);
+    margin-bottom: 4px;
+  }
+  #modal .attack .acost {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  #modal .attack .aeffect {
+    font-size: 13px;
+    margin-top: 6px;
+    white-space: pre-wrap;
+  }
+  #modal-add-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent-yellow);
+    color: #1a2744;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  #modal-add-btn:disabled { background: #555; color: #999; cursor: not-allowed; }
+
+  #loading {
+    padding: 30px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>ポケモンTCG デッキビルダー</h1>
+    <div class="status" id="header-status">読み込み中...</div>
+  </header>
+  <main>
+    <section id="left-pane" class="pane">
+      <div class="filters">
+        <input type="text" id="search-text" placeholder="カード名・効果テキストで検索...">
+        <select id="filter-category">
+          <option value="all">すべて</option>
+          <option value="pokemon">ポケモン</option>
+          <option value="trainer">トレーナーズ</option>
+          <option value="energy">エネルギー</option>
+        </select>
+        <select id="filter-type">
+          <option value="all">タイプ: すべて</option>
+          <option value="草">草</option>
+          <option value="炎">炎</option>
+          <option value="水">水</option>
+          <option value="雷">雷</option>
+          <option value="超">超</option>
+          <option value="闘">闘</option>
+          <option value="悪">悪</option>
+          <option value="鋼">鋼</option>
+          <option value="竜">竜</option>
+          <option value="無">無</option>
+        </select>
+        <select id="filter-stage">
+          <option value="all">進化段階: すべて</option>
+          <option value="たね">たね</option>
+          <option value="1進化">1進化</option>
+          <option value="2進化">2進化</option>
+        </select>
+        <div class="count" id="result-count"></div>
+      </div>
+      <div id="card-list-container">
+        <div id="loading">CSVを読み込んでいます...</div>
+        <div id="card-list"></div>
+      </div>
+    </section>
+    <section id="right-pane" class="pane">
+      <h2>デッキ</h2>
+      <div id="deck-summary">
+        <span class="deck-count" id="deck-count">0</span> / 60枚
+      </div>
+      <div id="deck-list-container">
+        <div id="deck-list"></div>
+      </div>
+      <div id="deck-actions">
+        <button id="export-btn">JSONエクスポート</button>
+        <button id="reset-btn">リセット</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="modal-overlay">
+  <div id="modal">
+    <button id="modal-close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "ptcg_deck_builder_v1";
+  const MAX_COPIES = 4;
+  const DECK_SIZE = 60;
+
+  const TYPE_COLORS = {
+    "草": "var(--type-草)", "炎": "var(--type-炎)", "水": "var(--type-水)",
+    "雷": "var(--type-雷)", "超": "var(--type-超)", "闘": "var(--type-闘)",
+    "悪": "var(--type-悪)", "鋼": "var(--type-鋼)", "竜": "var(--type-竜)",
+    "無": "var(--type-無)", "虹": "var(--type-虹)"
+  };
+
+  const TRAINER_STAGES = new Set(["グッズ", "サポート", "スタジアム", "ポケモンのどうぐ"]);
+  const ENERGY_STAGES = new Set(["基本エネルギー", "特殊エネルギー"]);
+
+  let cards = [];       // merged card objects, keyed by id
+  let cardsById = {};
+  let deck = {};         // card_id -> count
+
+  function isBasicEnergy(card) {
+    return card.stage === "基本エネルギー";
+  }
+
+  function categoryOf(card) {
+    if (card.stage.startsWith("ポケモン/")) return "pokemon";
+    if (TRAINER_STAGES.has(card.stage)) return "trainer";
+    if (ENERGY_STAGES.has(card.stage)) return "energy";
+    return "other";
+  }
+
+  function stageShort(card) {
+    if (card.stage.startsWith("ポケモン/")) return card.stage.replace("ポケモン/", "");
+    return card.stage;
+  }
+
+  function loadCSV() {
+    return new Promise((resolve, reject) => {
+      Papa.parse("../pokemon-tcg-ai-battle/JP_Card_Data.csv", {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => resolve(results.data),
+        error: reject
+      });
+    });
+  }
+
+  function buildCards(rows) {
+    const byId = {};
+    for (const r of rows) {
+      const id = r["カード ID"];
+      if (!id) continue;
+      if (!byId[id]) {
+        byId[id] = {
+          id: id,
+          name: r["カード名"],
+          expansion: r["エキスパンションマーク"],
+          collectionNo: r["コレクション番号"],
+          stage: r["ポケモンの進化の段階/エネルギー・トレーナーズの種類"],
+          rule: r["ルール"],
+          category: r["カテゴリ"],
+          evolvesFrom: r["進化前"],
+          hp: r["HP"],
+          type: r["タイプ"],
+          weakness: r["弱点"],
+          resistance: r["抵抗力"],
+          retreat: r["にげる"],
+          attacks: [],
+          searchText: ""
+        };
+      }
+      const card = byId[id];
+      const moveName = r["ワザ名"];
+      if (moveName && moveName !== "n/a") {
+        card.attacks.push({
+          name: moveName,
+          cost: r["コスト"],
+          damage: r["ダメージ"],
+          effect: r["効果の説明"]
+        });
+      } else if (r["効果の説明"] && r["効果の説明"] !== "n/a" && !card.effectText) {
+        card.effectText = r["効果の説明"];
+      }
+    }
+    const list = Object.values(byId);
+    for (const c of list) {
+      const effectParts = c.attacks.map(a => a.effect || "").concat(c.effectText || "");
+      c.searchText = (c.name + " " + effectParts.join(" ")).toLowerCase();
+    }
+    list.sort((a, b) => Number(a.id) - Number(b.id));
+    return list;
+  }
+
+  function deckTotal() {
+    let total = 0;
+    for (const id in deck) total += deck[id];
+    return total;
+  }
+
+  function saveDeck() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
+  }
+
+  function loadDeck() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) deck = JSON.parse(raw);
+    } catch (e) {
+      deck = {};
+    }
+  }
+
+  function maxAllowed(card) {
+    return isBasicEnergy(card) ? Infinity : MAX_COPIES;
+  }
+
+  function addToDeck(id) {
+    const card = cardsById[id];
+    if (!card) return;
+    const current = deck[id] || 0;
+    if (current >= maxAllowed(card)) return;
+    deck[id] = current + 1;
+    saveDeck();
+    renderDeck();
+    renderCardList();
+  }
+
+  function removeOneFromDeck(id) {
+    if (!deck[id]) return;
+    deck[id] -= 1;
+    if (deck[id] <= 0) delete deck[id];
+    saveDeck();
+    renderDeck();
+    renderCardList();
+  }
+
+  function removeAllFromDeck(id) {
+    delete deck[id];
+    saveDeck();
+    renderDeck();
+    renderCardList();
+  }
+
+  function resetDeck() {
+    if (!confirm("デッキをリセットしますか？この操作は取り消せません。")) return;
+    deck = {};
+    saveDeck();
+    renderDeck();
+    renderCardList();
+  }
+
+  function exportDeck() {
+    const cardsOut = Object.keys(deck).map(id => ({
+      card_id: Number(id),
+      card_name: cardsById[id] ? cardsById[id].name : "",
+      count: deck[id]
+    }));
+    const out = {
+      deck_name: "My Deck",
+      cards: cardsOut,
+      total: deckTotal()
+    };
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "deck.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function typeBadge(type) {
+    if (!type || type === "n/a") return "";
+    const color = TYPE_COLORS[type] || "#777";
+    return `<span class="type-badge" style="background:${color}">${type}</span>`;
+  }
+
+  function renderCardTile(card) {
+    const cat = categoryOf(card);
+    const count = deck[card.id] || 0;
+    const max = maxAllowed(card);
+    const disabled = count >= max;
+    const color = cat === "pokemon" && card.type ? (TYPE_COLORS[card.type] || "#777") : "#777";
+
+    let metaLines = [];
+    metaLines.push(`${card.expansion} ${card.collectionNo}`);
+    if (cat === "pokemon") {
+      metaLines.push(`${stageShort(card)} ${typeBadge(card.type)} HP${card.hp}`);
+    } else {
+      metaLines.push(stageShort(card));
+    }
+    if (count > 0) metaLines.push(`デッキ内: ${count}枚`);
+
+    const div = document.createElement("div");
+    div.className = "card-tile";
+    div.dataset.id = card.id;
+    div.innerHTML = `
+      <div class="type-bar" style="background:${color}"></div>
+      <button class="add-btn" data-id="${card.id}" ${disabled ? "disabled" : ""}>+</button>
+      <img class="thumb" src="images/${card.id}.png" alt="${escapeHtml(card.name)}" loading="lazy" onerror="this.style.display='none'">
+      <div class="name">${escapeHtml(card.name)}</div>
+      <div class="meta">${metaLines.join("<br>")}</div>
+    `;
+    return div;
+  }
+
+  function escapeHtml(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function getFilteredCards() {
+    const text = document.getElementById("search-text").value.trim().toLowerCase();
+    const cat = document.getElementById("filter-category").value;
+    const type = document.getElementById("filter-type").value;
+    const stage = document.getElementById("filter-stage").value;
+
+    return cards.filter(card => {
+      if (cat !== "all" && categoryOf(card) !== cat) return false;
+      if (type !== "all" && card.type !== type) return false;
+      if (stage !== "all" && stageShort(card) !== stage) return false;
+      if (text && !card.searchText.includes(text)) return false;
+      return true;
+    });
+  }
+
+  function renderCardList() {
+    const listEl = document.getElementById("card-list");
+    const filtered = getFilteredCards();
+    listEl.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    for (const card of filtered) {
+      frag.appendChild(renderCardTile(card));
+    }
+    listEl.appendChild(frag);
+    document.getElementById("result-count").textContent = `${filtered.length}枚 表示中`;
+  }
+
+  function renderDeck() {
+    const total = deckTotal();
+    const countEl = document.getElementById("deck-count");
+    countEl.textContent = total;
+    countEl.classList.toggle("over", total > DECK_SIZE);
+
+    const listEl = document.getElementById("deck-list");
+    listEl.innerHTML = "";
+    const ids = Object.keys(deck).sort((a, b) => Number(a) - Number(b));
+    const frag = document.createDocumentFragment();
+    for (const id of ids) {
+      const card = cardsById[id];
+      if (!card) continue;
+      const row = document.createElement("div");
+      row.className = "deck-row";
+      row.innerHTML = `
+        <span class="dname" title="${escapeHtml(card.name)}">${escapeHtml(card.name)}</span>
+        <button class="dec" data-id="${id}">－</button>
+        <span class="dcount">${deck[id]}</span>
+        <button class="inc" data-id="${id}" ${deck[id] >= maxAllowed(card) ? "disabled" : ""}>＋</button>
+        <button class="remove" data-id="${id}">×</button>
+      `;
+      frag.appendChild(row);
+    }
+    listEl.appendChild(frag);
+  }
+
+  function openModal(card) {
+    const cat = categoryOf(card);
+    const count = deck[card.id] || 0;
+    const max = maxAllowed(card);
+    const disabled = count >= max;
+
+    let attacksHtml = "";
+    if (card.attacks.length > 0) {
+      attacksHtml = card.attacks.map(a => `
+        <div class="attack">
+          <div class="aname">${escapeHtml(a.name)}</div>
+          <div class="acost">コスト: ${escapeHtml(a.cost)} ${a.damage && a.damage !== "n/a" ? " / ダメージ: " + escapeHtml(a.damage) : ""}</div>
+          ${a.effect && a.effect !== "n/a" ? `<div class="aeffect">${escapeHtml(a.effect)}</div>` : ""}
+        </div>
+      `).join("");
+    } else if (card.effectText) {
+      attacksHtml = `<div class="attack"><div class="aeffect">${escapeHtml(card.effectText)}</div></div>`;
+    }
+
+    let infoGrid = `
+      <div><span>進化段階: </span>${escapeHtml(stageShort(card))}</div>
+      <div><span>カテゴリ: </span>${card.category && card.category !== "n/a" ? escapeHtml(card.category) : "-"}</div>
+    `;
+    if (card.evolvesFrom && card.evolvesFrom !== "n/a") {
+      infoGrid += `<div><span>進化前: </span>${escapeHtml(card.evolvesFrom)}</div>`;
+    }
+    if (cat === "pokemon") {
+      infoGrid += `
+        <div><span>HP: </span>${escapeHtml(card.hp)}</div>
+        <div><span>タイプ: </span>${typeBadge(card.type)}</div>
+        <div><span>弱点: </span>${card.weakness ? typeBadge(card.weakness) : "-"}</div>
+        <div><span>抵抗力: </span>${card.resistance && card.resistance !== "n/a" ? escapeHtml(card.resistance) : "-"}</div>
+        <div><span>にげる: </span>${escapeHtml(card.retreat)}</div>
+      `;
+    }
+    if (card.rule && card.rule !== "n/a") {
+      infoGrid += `<div><span>ルール: </span>${escapeHtml(card.rule)}</div>`;
+    }
+
+    document.getElementById("modal-body").innerHTML = `
+      <img class="modal-img" src="images/${card.id}.png" alt="${escapeHtml(card.name)}" onerror="this.style.display='none'">
+      <h3>${escapeHtml(card.name)}</h3>
+      <div class="sub">${escapeHtml(card.expansion)} ${escapeHtml(card.collectionNo)} (ID: ${card.id})</div>
+      <div class="info-grid">${infoGrid}</div>
+      ${attacksHtml}
+      <button id="modal-add-btn" data-id="${card.id}" ${disabled ? "disabled" : ""}>
+        デッキに追加 ${count > 0 ? "(現在 " + count + "枚)" : ""}
+      </button>
+    `;
+    document.getElementById("modal-overlay").classList.add("open");
+  }
+
+  function closeModal() {
+    document.getElementById("modal-overlay").classList.remove("open");
+  }
+
+  function init() {
+    loadDeck();
+
+    loadCSV().then(rows => {
+      cards = buildCards(rows);
+      cardsById = {};
+      for (const c of cards) cardsById[c.id] = c;
+
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("header-status").textContent = `カードデータ ${cards.length}枚 読み込み完了`;
+      renderCardList();
+      renderDeck();
+    }).catch(err => {
+      document.getElementById("loading").textContent = "CSVの読み込みに失敗しました: " + err;
+      document.getElementById("header-status").textContent = "読み込みエラー";
+    });
+
+    document.getElementById("search-text").addEventListener("input", renderCardList);
+    document.getElementById("filter-category").addEventListener("change", renderCardList);
+    document.getElementById("filter-type").addEventListener("change", renderCardList);
+    document.getElementById("filter-stage").addEventListener("change", renderCardList);
+
+    document.getElementById("card-list").addEventListener("click", (e) => {
+      const addBtn = e.target.closest(".add-btn");
+      if (addBtn) {
+        e.stopPropagation();
+        addToDeck(addBtn.dataset.id);
+        return;
+      }
+      const tile = e.target.closest(".card-tile");
+      if (tile) {
+        const card = cardsById[tile.dataset.id];
+        if (card) openModal(card);
+      }
+    });
+
+    document.getElementById("deck-list").addEventListener("click", (e) => {
+      const id = e.target.dataset.id;
+      if (!id) return;
+      if (e.target.classList.contains("inc")) addToDeck(id);
+      else if (e.target.classList.contains("dec")) removeOneFromDeck(id);
+      else if (e.target.classList.contains("remove")) removeAllFromDeck(id);
+    });
+
+    document.getElementById("export-btn").addEventListener("click", exportDeck);
+    document.getElementById("reset-btn").addEventListener("click", resetDeck);
+
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    document.getElementById("modal-overlay").addEventListener("click", (e) => {
+      if (e.target.id === "modal-overlay") closeModal();
+    });
+    document.getElementById("modal-body").addEventListener("click", (e) => {
+      if (e.target.id === "modal-add-btn") {
+        addToDeck(e.target.dataset.id);
+        openModal(cardsById[e.target.dataset.id]);
+      }
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
+<!--
+動作確認:
+1. リポジトリルートで `python3 -m http.server 8000` を実行
+2. ブラウザで http://localhost:8000/deck-maker/index.html を開く
+3. 左ペインでカードが1267枚分ロードされること、検索・タイプ/進化段階フィルターが機能することを確認
+4. カードクリックでモーダルが開き、ワザ・効果が表示されること、モーダル内の追加ボタンが機能することを確認
+5. 右ペインで枚数が4枚（基本エネルギーは無制限）で上限になり、+/-/×ボタンとJSONエクスポート・リセットが動作することを確認
+6. ページをリロードしてもLocalStorageによりデッキ内容が保持されることを確認
+-->
