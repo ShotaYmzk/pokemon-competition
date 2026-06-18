@@ -140,18 +140,20 @@
   }
   #card-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
   }
   @media (max-width: 900px) {
+    #card-list-container {
+      padding: 6px;
+    }
     #card-list {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(var(--mobile-card-columns, 4), minmax(0, 1fr));
       gap: 6px;
     }
   }
   @media (max-width: 480px) {
     #card-list {
-      grid-template-columns: repeat(4, 1fr);
       gap: 4px;
     }
   }
@@ -167,7 +169,8 @@
   }
   @media (max-width: 900px) {
     .card-tile {
-      padding: 4px;
+      min-width: 0;
+      padding: 3px;
       border-radius: 6px;
     }
   }
@@ -203,10 +206,15 @@
     line-height: 1.5;
   }
   @media (max-width: 900px) {
+    .card-tile .thumb {
+      margin-top: 2px;
+      border-radius: 4px;
+    }
     .card-tile .name {
       font-size: 11px;
-      margin: 4px 0 2px;
-      padding-right: 18px;
+      line-height: 1.2;
+      margin: 3px 0 1px;
+      padding-right: 16px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -235,11 +243,11 @@
   }
   @media (max-width: 900px) {
     .add-btn {
-      width: 20px;
-      height: 20px;
-      font-size: 13px;
-      top: 4px;
-      right: 4px;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      top: 3px;
+      right: 3px;
     }
   }
   .add-btn:hover { background: #fff; }
@@ -252,6 +260,42 @@
     font-size: 10px;
     font-weight: bold;
     color: #fff;
+  }
+
+  .column-control {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .column-buttons {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .column-btn {
+    width: 34px;
+    height: 30px;
+    border: 0;
+    border-right: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .column-btn:last-child {
+    border-right: 0;
+  }
+  .column-btn.active {
+    background: var(--accent-yellow);
+    color: #1a2744;
+  }
+  @media (max-width: 900px) {
+    .column-control {
+      display: flex;
+    }
   }
 
   /* Right pane - deck */
@@ -507,6 +551,13 @@
           <option value="1進化">1進化</option>
           <option value="2進化">2進化</option>
         </select>
+        <div class="column-control" aria-label="カード列数">
+          <span>列数</span>
+          <div class="column-buttons">
+            <button type="button" class="column-btn" data-columns="3" aria-pressed="false">3</button>
+            <button type="button" class="column-btn" data-columns="4" aria-pressed="true">4</button>
+          </div>
+        </div>
         <div class="count" id="result-count"></div>
       </div>
       <div id="card-list-container">
@@ -543,6 +594,7 @@
 
   const STORAGE_KEY = "ptcg_deck_builder_v1";
   const COLLAPSE_KEY = "ptcg_deck_list_collapsed";
+  const COLUMN_KEY = "ptcg_card_columns_mobile";
   const MAX_COPIES = 4;
   const DECK_SIZE = 60;
 
@@ -559,6 +611,17 @@
   let cards = [];       // merged card objects, keyed by id
   let cardsById = {};
   let deck = {};         // card_id -> count
+
+  function applyColumnCount(value) {
+    const columns = value === "3" ? "3" : "4";
+    document.documentElement.style.setProperty("--mobile-card-columns", columns);
+    document.querySelectorAll(".column-btn").forEach(btn => {
+      const active = btn.dataset.columns === columns;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+    localStorage.setItem(COLUMN_KEY, columns);
+  }
 
   function isBasicEnergy(card) {
     return card.stage === "基本エネルギー";
@@ -869,6 +932,7 @@
 
   function init() {
     loadDeck();
+    applyColumnCount(localStorage.getItem(COLUMN_KEY));
 
     loadCSV().then(rows => {
       cards = buildCards(rows);
@@ -888,6 +952,11 @@
     document.getElementById("filter-category").addEventListener("change", renderCardList);
     document.getElementById("filter-type").addEventListener("change", renderCardList);
     document.getElementById("filter-stage").addEventListener("change", renderCardList);
+    document.querySelector(".column-buttons").addEventListener("click", (e) => {
+      const btn = e.target.closest(".column-btn");
+      if (!btn) return;
+      applyColumnCount(btn.dataset.columns);
+    });
 
     document.getElementById("card-list").addEventListener("click", (e) => {
       const addBtn = e.target.closest(".add-btn");
