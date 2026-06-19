@@ -385,3 +385,13 @@ budget/move (3000s / ~70手) = 42.9秒/手 -> 1手あたり約100万回のSearch
 - **変更**: `datasets/collect_top_replays.py` と `datasets/extract_replay_dataset.py` を追加し、上位5チームから10公開リプレイを `datasets/top_replays/` に収集した。抽出結果は20デッキ、模倣候補4226行、`valid_select_action` 2154行。
 - **理由**: Kaggle CLI の公開 replay は `steps` に `observation` と `action` を含むため、ログ403でもデッキ解析と imitation learning の教師候補に使える。`action` は観測の次stepに記録されるため、抽出は `next-step` alignment をデフォルトにした。
 - **検証**: `python -m py_compile datasets/collect_top_replays.py datasets/extract_replay_dataset.py`、`python datasets/collect_top_replays.py --top-teams 5 --episodes-per-submission 2 --max-replays 10 --out-dir datasets/top_replays`、`python datasets/extract_replay_dataset.py --replay-glob 'datasets/top_replays/replays/*.json' --out-dir datasets/top_replays/extracted` が成功。20デッキすべて60枚・未知IDなし・同名4枚制限違反なし。
+- **追加収集**: 同日、時間制約10分以内で追加収集を実行。最終的に92リプレイ、184デッキ、28,253行動例へ拡張し、`--include-current` 付きで盤面状態も再抽出した。容量は約34MB。
+- **標本上の注意**: 184デッキの多重集合を重複排除すると31種類、デッキ行に現れるプレイヤー/チーム名は59。試合数ベースの採用率は同一デッキの反復対戦に偏るため、傾向分析では「試合加重」と「デッキリスト重複排除」の両方を併記する。
+- **主要カード（試合加重）**: ポケパッドは179/184デッキ、ボスの指令141/184、リーリエの決心129/184、なかよしポフィン109/184で確認。基本闘エネルギー73/184、基本雷エネルギー35/184。
+- **追加102デッキ**: 上位チームの過去提出まで探索範囲を広げ、51リプレイ・102デッキを追加。累計143リプレイ、286デッキ、重複除外52種類、95プレイヤー/チーム名、41,217行動例、約50MBとなった。最新の試合加重採用数はポケパッド264/286、ボスの指令217/286、リーリエの決心211/286、なかよしポフィン149/286。
+
+## 2026-06-19: deck.json を提出デッキへ反映
+
+- **変更**: `deck.json` の 60枚構成を `agent/deck.csv` に反映し、既存の `agent/deck.csv` は `agent/decks/legacy/2026-06-19_current-deck.csv` に退避した。
+- **理由**: 現行デッキを legacy として残しつつ、新しいデッキ案へ差し替えるため。
+- **検証**: 新 `agent/deck.csv` は 60 行であることを確認し、`python explore/visualize_deck.py --deck /tmp/deck_from_json.csv --out explore/deck_visualization_deckjson` で可視化できた。
